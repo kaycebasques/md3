@@ -1,0 +1,31 @@
+load("@rules_python//python/uv:lock.bzl", "lock")
+
+lock(
+    name = "requirements",
+    srcs = ["requirements.in"],
+    out = "requirements.txt",
+)
+
+alias(
+    name = "serve",
+    actual = "//docs:docs.serve",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "ls",
+    actual = "//docs:_docs/_sources",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "wheel",
+    actual = "//paz:wheel",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "publish",
+    actual = "//paz:wheel.publish",
+    visibility = ["//visibility:public"],
+)

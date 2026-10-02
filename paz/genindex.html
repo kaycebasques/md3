@@ -1,0 +1,46 @@
+{%- extends "layout.html" %}
+{%- block title %}{{ _('Index') }} | {{ docstitle|default(project) }}{% endblock %}
+
+{%- block body %}
+<div class="md3-genindex-page">
+  <h1 id="index" class="md-typescale-headline-large">{{ _('Index') }}</h1>
+
+  {%- if genindexentries %}
+  <div class="genindex-jumpbox" style="margin: 16px 0; display: flex; flex-wrap: wrap; gap: 8px;">
+    {%- for key, dummy in genindexentries %}
+    <a href="#{{ key }}" class="md3-btn md3-btn--tonal md3-btn--small" style="text-decoration: none;">{{ key }}</a>
+    {%- endfor %}
+  </div>
+
+  <div class="genindex-entries">
+    {%- for key, entries in genindexentries %}
+    <h2 id="{{ key }}" class="md-typescale-headline-medium" style="margin-top: 24px; border-bottom: 1px solid var(--md-sys-color-outline-variant);">{{ key }}</h2>
+    <ul class="md3-index-list" style="list-style: none; padding-left: 0;">
+      {%- for entryname, (links, subitems, key_) in entries %}
+      <li style="margin: 6px 0;">
+        <span style="font-weight: 500;">{{ entryname }}</span>
+        {%- if links %}
+        {%- for link in links %}
+        <a href="{{ link[1] }}" class="md3-btn md3-btn--text md3-btn--small" style="margin-left: 4px;">[{{ loop.index }}]</a>
+        {%- endfor %}
+        {%- endif %}
+        {%- if subitems %}
+        <ul style="list-style: none; padding-left: 20px; margin: 4px 0;">
+          {%- for subentryname, sublinks in subitems %}
+          <li style="margin: 4px 0;">
+            <span>{{ subentryname }}</span>
+            {%- for sublink in sublinks %}
+            <a href="{{ sublink[1] }}" class="md3-btn md3-btn--text md3-btn--small" style="margin-left: 4px;">[{{ loop.index }}]</a>
+            {%- endfor %}
+          </li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+      </li>
+      {%- endfor %}
+    </ul>
+    {%- endfor %}
+  </div>
+  {%- endif %}
+</div>
+{%- endblock %}

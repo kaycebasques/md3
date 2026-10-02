@@ -1,0 +1,84 @@
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
+pypi_deps = [
+    "@deps//playwright",
+    "@deps//sphinx",
+]
+
+deps = pypi_deps + [":harness", "//paz", "//md3"]
+
+py_library(
+    name = "harness",
+    srcs = [
+        "harness.py",
+        "md3_spec.py",
+    ],
+    imports = ["."],
+    deps = pypi_deps,
+)
+
+py_test(
+    name = "test_html",
+    srcs = ["test_html.py"],
+    deps = deps,
+)
+
+py_test(
+    name = "test_md3_tokens",
+    srcs = ["test_md3_tokens.py"],
+    data = [
+        "//paz:theme.toml",
+        "//paz:components/app.css",
+        "@playwright//:chromium",
+    ],
+    env = {
+        "PLAYWRIGHT_BROWSERS_PATH": "$(rootpath @playwright//:chromium)/../",
+    },
+    deps = deps,
+)
+
+[
+    py_test(
+        name = "test_" + test_name,
+        srcs = ["test_" + test_name + ".py"],
+        data = [
+            "//docs:docs",
+            "@playwright//:chromium",
+        ],
+        # Direct Playwright to look for browsers in the runfiles
+        env = {
+            "PLAYWRIGHT_BROWSERS_PATH": "$(rootpath @playwright//:chromium)/../",
+        },
+        deps = deps,
+    )
+    for test_name in [
+        "app",
+        "runtime",
+        "md3_density",
+        "md3_layout",
+        "md3_components",
+        "md3_navigation",
+        "md3_sphinx_elements",
+        "md3_accessibility",
+        "md3_deeplinks",
+        "md3_progressive_enhancement",
+    ]
+]
+
+test_suite(
+    name = "tests",
+    tests = [
+        ":test_app",
+        ":test_html",
+        ":test_runtime",
+        ":test_md3_tokens",
+        ":test_md3_density",
+        ":test_md3_layout",
+        ":test_md3_components",
+        ":test_md3_navigation",
+        ":test_md3_sphinx_elements",
+        ":test_md3_accessibility",
+        ":test_md3_deeplinks",
+        ":test_md3_progressive_enhancement",
+    ],
+)

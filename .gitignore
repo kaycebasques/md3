@@ -1,0 +1,3 @@
+.bazelisk/
+bazel-*
+docs/_build/

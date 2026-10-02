@@ -1,0 +1,56 @@
+load("@sphinxdocs//sphinxdocs:sphinx.bzl", "sphinx_build_binary", "sphinx_docs")
+load("@sphinxdocs//sphinxdocs:sphinx_docs_library.bzl", "sphinx_docs_library")
+
+package(default_visibility = ["//visibility:public"])
+
+sphinx_docs_library(
+    name = "content",
+    srcs = [
+        "components.rst",
+        "components/admonitions.rst",
+        "components/app.rst",
+        "components/breadcrumbs.rst",
+        "components/buttons.rst",
+        "components/cards.rst",
+        "components/chips.rst",
+        "components/color.rst",
+        "components/copy-button.rst",
+        "components/dividers.rst",
+        "components/icon-buttons.rst",
+        "components/nav-tabs.rst",
+        "components/progressive-enhancement.rst",
+        "components/search.rst",
+        "components/sidebar.rst",
+        "components/tables.rst",
+        "components/theme-toggle.rst",
+        "components/toc.rst",
+        "components/top-app-bar.rst",
+        "components/typography.rst",
+        "index.rst",
+        "tokens.rst",
+    ],
+    visibility = ["//visibility:private"],
+)
+
+sphinx_build_binary(
+    name = "sphinx",
+    deps = [
+        "@deps//sphinx",
+        "//md3",
+        "//paz",
+    ],
+    visibility = ["//visibility:private"],
+)
+
+sphinx_docs(
+    name = "docs",
+    config = "conf.py",
+    formats = ["html"],
+    sphinx = ":sphinx",
+    strip_prefix = "docs/",
+    deps = [
+        ":content",
+    ],
+    allow_persistent_workers = False,
+    extra_opts = ["--fail-on-warning"],
+)

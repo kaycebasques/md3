@@ -1,0 +1,37 @@
+module(
+    name = "paz",
+    version = "0.0.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+# rules_playwright 0.5.3 depends on aspect_bazel_lib 2.11.0, which is
+# incompatible with Bazel 9. Declaring a newer version here bumps the
+# resolved version.
+bazel_dep(name = "aspect_bazel_lib", version = "2.22.5", dev_dependency = True)
+bazel_dep(name = "rules_playwright", version = "0.5.3", dev_dependency = True)
+bazel_dep(name = "rules_python", version = "1.9.1")
+bazel_dep(name = "sphinxdocs", version = "2.2.0")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.defaults(python_version = "3.12")
+python.toolchain(python_version = "3.12")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "deps",
+    python_version = "3.12",
+    requirements_lock = "//:requirements.txt",
+)
+use_repo(pip, "deps")
+
+uv = use_extension("@rules_python//python/uv:uv.bzl", "uv", dev_dependency = True)
+uv.configure()
+
+# Pin Playwright to 1.46.0 to match rules_playwright 0.5.3 capabilities
+# and avoid 404 errors when downloading browsers
+playwright = use_extension("@rules_playwright//playwright:extensions.bzl", "playwright", dev_dependency = True)
+playwright.repo(
+    name = "playwright",
+    playwright_version = "1.46.0",
+)
+use_repo(playwright, "playwright")

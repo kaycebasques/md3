@@ -1,0 +1,4 @@
+common --incompatible_autoload_externally=+py_runtime,+cc_library,+CcToolchainConfigInfo
+common --noincompatible_disallow_ctx_resolve_tools
+common --incompatible_default_to_explicit_init_py
+build --incompatible_enable_cc_toolchain_resolution

@@ -1,0 +1,32 @@
+name: ci
+on:
+  push:
+    branches: ['main']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/bazel
+            ~/.cache/bazelisk
+          key: bazel-${{runner.os}}-${{hashFiles('.bazelversion', 'MODULE.bazel', 'MODULE.bazel.lock', 'requirements.txt')}}
+          restore-keys: bazel-${{runner.os}}-
+      - name: playwright system deps
+        # rules_playwright provides the Chromium binary; the runner still needs
+        # the shared libraries that Chromium links against.
+        run: npx --yes playwright@1.46.0 install-deps chromium
+      - name: test
+        run: ./bazelisk test //tests --test_output=errors
+      - name: wheel
+        run: ./bazelisk build :wheel
+      - name: docs
+        run: ./bazelisk build //docs

@@ -1,0 +1,48 @@
+{# Template for domain indices (e.g. py-modindex). #}
+{%- extends "layout.html" %}
+{%- block title %}{{ indextitle }} | {{ docstitle|default(project) }}{% endblock %}
+
+{%- block body %}
+<div class="md3-domainindex-page">
+  <h1 class="md-typescale-headline-large">{{ indextitle }}</h1>
+
+  <div class="modindex-jumpbox" style="margin: 16px 0; display: flex; flex-wrap: wrap; gap: 8px;">
+  {%- for (letter, entries) in content %}
+    <a href="#cap-{{ letter }}" class="md3-btn md3-btn--tonal md3-btn--small" style="text-decoration: none;"><strong>{{ letter }}</strong></a>
+  {%- endfor %}
+  </div>
+
+  <table class="indextable modindextable" style="width: 100%; border-collapse: collapse; margin-top: 24px;">
+  {%- for letter, entries in content %}
+    <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+    <tr class="cap" id="cap-{{ letter }}">
+      <td colspan="3" style="padding: 12px 0 6px 0; border-bottom: 2px solid var(--md-sys-color-primary);">
+        <strong class="md-typescale-headline-medium" style="color: var(--md-sys-color-primary);">{{ letter }}</strong>
+      </td>
+    </tr>
+    {%- for (name, grouptype, page, anchor, extra, qualifier, description) in entries %}
+    <tr style="border-bottom: 1px solid var(--md-sys-color-outline-variant);">
+      <td style="width: 24px; padding: 8px 4px; text-align: center;">
+        {%- if grouptype == 1 %}
+        <span class="toggler" style="cursor: pointer;">&#9660;</span>
+        {%- endif %}
+      </td>
+      <td style="padding: 8px; font-family: var(--md-sys-typescale-body-medium-font);">
+        {%- if grouptype == 2 %}&#160;&#160;&#160;&#160;{%- endif %}
+        {%- if page %}
+        <a href="{{ pathto(page)|e }}#{{ anchor }}" class="reference internal" style="color: var(--md-sys-color-primary); font-weight: 500;">
+        {%- endif %}
+        <code>{{ name|e }}</code>
+        {%- if page %}</a>{% endif %}
+        {%- if extra %} <em>({{ extra|e }})</em>{% endif %}
+      </td>
+      <td style="padding: 8px; color: var(--md-sys-color-on-surface-variant); font-size: 0.9em;">
+        {%- if qualifier %}<strong>{{ qualifier|e }}:</strong> {% endif %}
+        <em>{{ description|e }}</em>
+      </td>
+    </tr>
+    {%- endfor %}
+  {%- endfor %}
+  </table>
+</div>
+{%- endblock %}

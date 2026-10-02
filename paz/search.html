@@ -1,0 +1,30 @@
+{%- extends "layout.html" %}
+{%- block title %}{{ _('Search') }} | {{ docstitle|default(project) }}{% endblock %}
+
+{%- block body %}
+<div class="md3-search-page" data-pagefind-ignore>
+  <h1 class="md-typescale-headline-large">{{ _('Search') }}</h1>
+  <p class="md-typescale-body-large">{{ _('Search this documentation using keywords or phrases.') }}</p>
+  
+  <form action="" method="get" class="md3-search-page-form" role="search" style="margin: 24px 0;">
+    <div style="display: flex; gap: 8px; max-width: 500px;">
+      <input type="search" name="q" value="" placeholder="Search..." class="md3-search-input" style="flex: 1; height: 36px; padding: 0 14px; border: 1px solid var(--md-sys-color-outline); border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface);" id="search-input" autofocus/>
+      <button type="submit" class="md3-btn md3-btn--filled md3-btn--small" id="search-submit">
+        <svg class="md3-icon" viewBox="0 0 24 24" width="16" height="16">
+          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <span>Search</span>
+      </button>
+    </div>
+  </form>
+
+  <div id="search-results" class="md3-search-page-results" style="margin-top: 24px;">
+    <noscript>
+      <div class="admonition admonition-warning">
+        <p class="admonition-title">Warning</p>
+        <p>Please activate JavaScript to enable the search functionality.</p>
+      </div>
+    </noscript>
+  </div>
+</div>
+{%- endblock %}
