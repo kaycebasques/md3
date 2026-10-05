@@ -2,7 +2,7 @@
 Components
 ==========
 
-Every web component, UI primitive, and design token system in ``paz`` has a
+Every web component, UI primitive, and design token system in ``md3`` has a
 dedicated documentation page detailing how it conforms to the Material Design 3
 (MD3) specification, including direct deeplinks to the relevant sections of
 `m3.material.io <https://m3.material.io>`_. When an MD3 conformance test fails,
@@ -12,9 +12,9 @@ within these component docs.
 Custom Web Components
 =====================
 
-The theme defines and registers custom elements in ``paz/components/app.js``:
+The theme defines and registers custom elements in ``md3/components/app.js``:
 
-* :doc:`components/app` (``<paz-app>`` / ``<md3-app>``): Root application
+* :doc:`components/app` (``<md3-app>``): Root application
   scaffold, responsive window size breakpoints, ``-2`` compact density scale,
   and accessible landmark hierarchy.
 * :doc:`components/top-app-bar` (``<md3-top-app-bar>``): Sticky small top app

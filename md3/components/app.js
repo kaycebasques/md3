@@ -3,20 +3,50 @@
  */
 
 // ---------------------------------------------------------------------------
-// Theme Management
+// Theme Management & Safe Storage Helpers
 // ---------------------------------------------------------------------------
-export function getStoredTheme() {
+export function safeGetStorage(key) {
   try {
-    return localStorage.getItem('theme');
+    return localStorage.getItem(key);
   } catch (e) {
     return null;
   }
 }
 
-export function setStoredTheme(theme) {
+export function safeSetStorage(key, value) {
   try {
-    localStorage.setItem('theme', theme);
+    localStorage.setItem(key, value);
   } catch (e) {}
+}
+
+export function safeRemoveStorage(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch (e) {}
+}
+
+export function cleanUpLegacyAutoTheme() {
+  const mode = safeGetStorage('mode');
+  const theme = safeGetStorage('theme');
+  if (mode === 'auto' || theme === 'auto') {
+    safeRemoveStorage('mode');
+    safeRemoveStorage('theme');
+    safeSetStorage('rustdoc-use-system-theme', 'true');
+  }
+}
+
+export function getStoredTheme() {
+  cleanUpLegacyAutoTheme();
+  return safeGetStorage('theme') || safeGetStorage('mode');
+}
+
+export function setStoredTheme(theme) {
+  safeSetStorage('theme', theme);
+  safeSetStorage('mode', theme);
+  safeSetStorage('rustdoc-theme', theme);
+  safeSetStorage('rustdoc-use-system-theme', 'false');
+  safeSetStorage('rustdoc-preferred-dark-theme', 'dark');
+  safeSetStorage('rustdoc-preferred-light-theme', 'light');
 }
 
 export function getPreferredTheme() {
@@ -36,18 +66,136 @@ export function syncPygmentsTheme(theme) {
   }
 }
 
-export function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  setStoredTheme(theme);
-  syncPygmentsTheme(theme);
-  document.dispatchEvent(new CustomEvent('md3-theme-change', { detail: { theme } }));
+export function applyTheme(theme, persist = true) {
+  const resolved = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.dataset.theme = resolved;
+  document.documentElement.dataset.mode = resolved;
+  document.documentElement.classList.remove('light-mode', 'dark-mode', 'auto-mode');
+  document.documentElement.classList.add(`${resolved}-mode`);
+  if (typeof window !== 'undefined' && typeof window.DarkModeToggle === 'function') {
+    try {
+      window.DarkModeToggle.enableDarkMode(resolved === 'dark');
+    } catch (e) {}
+  }
+  if (persist) {
+    setStoredTheme(resolved);
+  }
+  syncPygmentsTheme(resolved);
+  document.dispatchEvent(new CustomEvent('md3-theme-change', { detail: { theme: resolved } }));
 }
 
 export function toggleTheme() {
   const current = document.documentElement.dataset.theme || getPreferredTheme();
   const next = current === 'dark' ? 'light' : 'dark';
-  applyTheme(next);
+  applyTheme(next, true);
   return next;
+}
+
+// Keep OS prefers-color-scheme and bfcache restoration synchronized across pages
+if (typeof window !== 'undefined') {
+  if (window.matchMedia) {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', (e) => {
+        if (!getStoredTheme()) {
+          applyTheme(e.matches ? 'dark' : 'light', false);
+        }
+      });
+    }
+  }
+
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      applyTheme(getPreferredTheme(), false);
+    }
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Local & Staging URL Rewriting + Skip Link Focus Transfer
+// ---------------------------------------------------------------------------
+export function getSiteRootPath() {
+  const contentRoot = document.documentElement.getAttribute('data-content_root');
+  if (contentRoot) {
+    try {
+      return new URL(contentRoot, window.location.href).pathname;
+    } catch (e) {}
+  }
+  const header = document.querySelector('#md3-universal-header, pw-header');
+  if (header) {
+    const siteRoot = header.getAttribute('data-site-root');
+    if (siteRoot) {
+      try {
+        return new URL(`${siteRoot}/`, window.location.href).pathname;
+      } catch (e) {}
+    }
+  }
+  return '/';
+}
+
+export function isProductionDomain(hostname) {
+  const rawBase = document.documentElement.getAttribute('data-baseurl') || 'https://pigweed.dev/';
+  let prodHost = 'pigweed.dev';
+  try {
+    prodHost = new URL(rawBase).hostname || 'pigweed.dev';
+  } catch (e) {}
+  return hostname === prodHost || hostname === 'pigweed.dev';
+}
+
+export function rewriteUrls() {
+  if (typeof window === 'undefined') return;
+  if (isProductionDomain(window.location.hostname)) return;
+
+  const rootPath = getSiteRootPath();
+  const rawBase = document.documentElement.getAttribute('data-baseurl') || 'https://pigweed.dev/';
+  const prefixes = new Set(['https://pigweed.dev/']);
+  if (rawBase) {
+    prefixes.add(rawBase.endsWith('/') ? rawBase : `${rawBase}/`);
+  }
+
+  for (const prefix of prefixes) {
+    const links = document.querySelectorAll(`a[href^="${prefix}"]`);
+    links.forEach((link) => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith(prefix)) {
+        const subpath = href.slice(prefix.length);
+        link.setAttribute('href', `${rootPath}${subpath}`);
+      }
+    });
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.getSiteRootPath = getSiteRootPath;
+  window.isProductionDomain = isProductionDomain;
+  window.rewriteUrls = rewriteUrls;
+}
+
+export function initSkipLink() {
+  const skipLink = document.getElementById('md3-skip-link') || document.querySelector('.md3-skip-link');
+  if (!skipLink || skipLink._md3Initialized) return;
+  skipLink._md3Initialized = true;
+
+  skipLink.addEventListener('click', () => {
+    const href = skipLink.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+    const target =
+      document.getElementById(href.slice(1)) ||
+      document.getElementById('main') ||
+      document.getElementById('doc-content') ||
+      document.getElementById('main-content');
+    if (target) {
+      target.setAttribute('tabindex', '-1');
+      target.focus();
+      target.addEventListener(
+        'blur',
+        () => {
+          target.removeAttribute('tabindex');
+        },
+        { once: true }
+      );
+    }
+  });
 }
 
 function escapeHtml(str) {
@@ -72,6 +220,8 @@ export class Md3ThemeToggle extends HTMLElement {
     if (this._initialized) return;
     this._initialized = true;
 
+    const initialTheme = getPreferredTheme();
+    applyTheme(initialTheme, Boolean(getStoredTheme()));
     this.updateAria();
     this.syncRadioInputs();
 
@@ -89,7 +239,7 @@ export class Md3ThemeToggle extends HTMLElement {
       inputs.forEach((input) => {
         input.addEventListener('change', (e) => {
           const selected = e.target.value;
-          applyTheme(selected);
+          applyTheme(selected, true);
           if (typeof menu.hidePopover === 'function') {
             try {
               menu.hidePopover();
@@ -140,43 +290,19 @@ export class Md3ThemeToggle extends HTMLElement {
 
 /**
  * <md3-top-app-bar>: Sticky MD3 small top app bar managing navigation drawer trigger,
- * quick search bar trigger, and scroll elevation state.
+ * quick search bar trigger, universal subsite mobile drawers, and scroll elevation state.
  */
 export class Md3TopAppBar extends HTMLElement {
   connectedCallback() {
     if (this._initialized) return;
     this._initialized = true;
 
-    const drawerToggle = this.querySelector('#drawer-toggle');
-    if (drawerToggle) {
-      const toggleDrawer = () => {
-        const sidebar = document.querySelector('md3-sidebar, #md3-sidebar');
-        if (sidebar && typeof sidebar.toggle === 'function') {
-          sidebar.toggle();
-        }
-      };
-      drawerToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleDrawer();
-      });
-    }
-
-    const searchTrigger = this.querySelector('#search-bar-trigger');
-    if (searchTrigger) {
-      const openSearch = () => {
-        const searchEl = document.querySelector('md3-search');
-        if (searchEl && typeof searchEl.open === 'function') {
-          searchEl.open();
-        }
-      };
-      searchTrigger.addEventListener('click', openSearch);
-      searchTrigger.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openSearch();
-        }
-      });
-    }
+    initSkipLink();
+    rewriteUrls();
+    this.initUniversalHeaderMetrics();
+    this.initDrawerToggle();
+    this.initSearchTriggers();
+    this.initSubsiteActiveItemScroll();
 
     this._onScroll = () => {
       const scrolled = window.scrollY > 4;
@@ -187,9 +313,195 @@ export class Md3TopAppBar extends HTMLElement {
     this._onScroll();
   }
 
+  initUniversalHeaderMetrics() {
+    const universalHeader = this.closest('#md3-universal-header');
+    if (!universalHeader) return;
+
+    const updateHeight = () => {
+      const h = universalHeader.offsetHeight;
+      if (h > 0) {
+        document.documentElement.style.setProperty('--md3-universal-header-height', `${h}px`);
+      }
+    };
+    updateHeight();
+    if (typeof ResizeObserver !== 'undefined') {
+      this._headerResizeObserver = new ResizeObserver(updateHeight);
+      this._headerResizeObserver.observe(universalHeader);
+    }
+  }
+
+  initDrawerToggle() {
+    const drawerToggle = this.querySelector('#drawer-toggle');
+    if (!drawerToggle) return;
+
+    const backdrop = document.getElementById('md3-backdrop');
+
+    const closeSubsiteDrawers = () => {
+      const rustSidebar = document.querySelector('nav.sidebar');
+      if (rustSidebar && rustSidebar.classList.contains('shown')) {
+        rustSidebar.classList.remove('shown');
+      }
+      if (document.body.classList.contains('src')) {
+        document.documentElement.classList.remove('src-sidebar-expanded');
+      }
+      if (
+        document.body.classList.contains('md3-doxygen-nav-open') ||
+        document.body.classList.contains('pw-doxygen-nav-open')
+      ) {
+        document.body.classList.remove('md3-doxygen-nav-open', 'pw-doxygen-nav-open');
+      }
+      backdrop?.classList.remove('open');
+      drawerToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    const toggleDrawer = () => {
+      const sidebar = document.querySelector('md3-sidebar, #md3-sidebar');
+      if (sidebar && typeof sidebar.toggle === 'function') {
+        sidebar.toggle();
+        return;
+      }
+
+      const rustSidebar = document.querySelector('nav.sidebar');
+      const doxygenSidebar = document.getElementById('side-nav');
+
+      if (rustSidebar) {
+        const isOpen = rustSidebar.classList.toggle('shown');
+        if (document.body.classList.contains('src')) {
+          document.documentElement.classList.toggle('src-sidebar-expanded', isOpen);
+        }
+        backdrop?.classList.toggle('open', isOpen);
+        drawerToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      } else if (doxygenSidebar) {
+        const isOpen = !document.body.classList.contains('md3-doxygen-nav-open');
+        document.body.classList.toggle('md3-doxygen-nav-open', isOpen);
+        document.body.classList.toggle('pw-doxygen-nav-open', isOpen);
+        backdrop?.classList.toggle('open', isOpen);
+        drawerToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+    };
+
+    drawerToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleDrawer();
+    });
+
+    if (!document.querySelector('md3-sidebar, #md3-sidebar')) {
+      backdrop?.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeSubsiteDrawers();
+      });
+
+      this._onSubsiteLinkClick = (e) => {
+        if (window.innerWidth >= 840) return;
+        const rustLink = e.target.closest('nav.sidebar a, .rustdoc .sidebar a');
+        if (rustLink) {
+          closeSubsiteDrawers();
+          return;
+        }
+        const doxLink = e.target.closest('#side-nav a');
+        if (doxLink) {
+          const href = doxLink.getAttribute('href') || '';
+          if (href && !href.startsWith('javascript:')) {
+            closeSubsiteDrawers();
+          }
+        }
+      };
+      document.addEventListener('click', this._onSubsiteLinkClick);
+
+      this._onSubsiteKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          closeSubsiteDrawers();
+        }
+      };
+      document.addEventListener('keydown', this._onSubsiteKeyDown);
+
+      this._onSubsiteResize = () => {
+        if (window.innerWidth >= 840) {
+          closeSubsiteDrawers();
+        }
+      };
+      window.addEventListener('resize', this._onSubsiteResize);
+    }
+  }
+
+  initSearchTriggers() {
+    const openSearch = () => {
+      const searchEl = document.querySelector('md3-search');
+      if (searchEl && typeof searchEl.open === 'function') {
+        searchEl.open();
+      }
+    };
+
+    const searchTrigger = this.querySelector('#search-bar-trigger');
+    if (searchTrigger) {
+      searchTrigger.addEventListener('click', openSearch);
+      searchTrigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openSearch();
+        }
+      });
+    }
+
+    const mobileTrigger = this.querySelector('#search-mobile-trigger');
+    if (mobileTrigger) {
+      mobileTrigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        openSearch();
+      });
+    }
+  }
+
+  initSubsiteActiveItemScroll() {
+    const centerInContainer = (container, item) => {
+      if (!container || !item) return false;
+      if (container.scrollHeight > container.clientHeight) {
+        const containerRect = container.getBoundingClientRect();
+        const itemRect = item.getBoundingClientRect();
+        const offset = itemRect.top - containerRect.top + container.scrollTop;
+        container.scrollTop = Math.max(0, offset - container.clientHeight / 2 + itemRect.height / 2);
+      }
+      return true;
+    };
+
+    const rustSidebar = document.querySelector('nav.sidebar');
+    if (rustSidebar) {
+      const activeItem = rustSidebar.querySelector('a.current, .current');
+      centerInContainer(rustSidebar, activeItem);
+    }
+
+    const doxygenNavTree = document.getElementById('nav-tree');
+    if (doxygenNavTree) {
+      const scrollSelected = () => {
+        const selected = doxygenNavTree.querySelector('.selected');
+        return centerInContainer(doxygenNavTree, selected);
+      };
+      if (!scrollSelected() && typeof MutationObserver !== 'undefined') {
+        const obs = new MutationObserver(() => {
+          if (scrollSelected()) {
+            obs.disconnect();
+          }
+        });
+        obs.observe(doxygenNavTree, { childList: true, subtree: true });
+      }
+    }
+  }
+
   disconnectedCallback() {
     if (this._onScroll) {
       window.removeEventListener('scroll', this._onScroll);
+    }
+    if (this._onSubsiteLinkClick) {
+      document.removeEventListener('click', this._onSubsiteLinkClick);
+    }
+    if (this._onSubsiteKeyDown) {
+      document.removeEventListener('keydown', this._onSubsiteKeyDown);
+    }
+    if (this._onSubsiteResize) {
+      window.removeEventListener('resize', this._onSubsiteResize);
+    }
+    if (this._headerResizeObserver) {
+      this._headerResizeObserver.disconnect();
     }
   }
 }
@@ -1091,7 +1403,7 @@ export function initMobileToc() {
 }
 
 /**
- * <md3-app> / <paz-app>: Root application container orchestrating theme state and code block upgrades.
+ * <md3-app>: Root application container orchestrating theme state and code block upgrades.
  */
 export class Md3App extends HTMLElement {
   connectedCallback() {
@@ -1116,13 +1428,10 @@ export class Md3App extends HTMLElement {
   }
 }
 
-export class PazApp extends Md3App {}
-
 // ---------------------------------------------------------------------------
 // Register Web Components
 // ---------------------------------------------------------------------------
 const components = {
-  'paz-app': PazApp,
   'md3-app': Md3App,
   'md3-theme-toggle': Md3ThemeToggle,
   'md3-top-app-bar': Md3TopAppBar,

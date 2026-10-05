@@ -11,7 +11,7 @@ elevation, and motion token systems.
 Card Variants
 -------------
 
-``paz`` implements all three official Material Design 3 card variants inside a
+``md3`` implements all three official Material Design 3 card variants inside a
 responsive ``.md3-card-grid`` layout:
 
 1. **Outlined Card (``.md3-card--outlined``)**: ``--md-sys-color-surface``

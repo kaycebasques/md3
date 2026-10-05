@@ -7,8 +7,8 @@ class TestHtml(SphinxTestBase):
         outdir = self.build_docs(
             conf_content="""
                 project = "test_title"
-                extensions = ["paz"]
-                html_theme = "paz"
+                extensions = ["md3"]
+                html_theme = "md3"
             """,
             index_content="""
                 ==========

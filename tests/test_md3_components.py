@@ -69,7 +69,6 @@ class TestMd3Components(SphinxTestBase):
             page.goto(f"{self.url}/index.html")
 
             registered_tags = [
-                "paz-app",
                 "md3-app",
                 "md3-theme-toggle",
                 "md3-top-app-bar",
@@ -87,7 +86,7 @@ class TestMd3Components(SphinxTestBase):
                 )
 
             rendered_tags = [
-                "paz-app",
+                "md3-app",
                 "md3-top-app-bar",
                 "md3-theme-toggle",
                 "md3-sidebar",

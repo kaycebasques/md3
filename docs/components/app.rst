@@ -2,7 +2,7 @@
 App Scaffold & Layout
 =========================
 
-The ``<paz-app>`` (and ``<md3-app>``) root custom element orchestrates the
+The ``<md3-app>`` root custom element orchestrates the
 Material Design 3 application scaffold, responsive window size breakpoints,
 compact density scale, and accessible landmark hierarchy.
 
@@ -12,9 +12,9 @@ Custom Elements Registry
 ------------------------
 
 Every interactive theme component is implemented as a standard Custom Element
-and registered with ``window.customElements`` in ``paz/components/app.js``:
+and registered with ``window.customElements`` in ``md3/components/app.js``:
 
-* ``<paz-app>`` / ``<md3-app>`` — Root application shell, Pygments theme sync,
+* ``<md3-app>`` — Root application shell, Pygments theme sync,
   and automatic code block copy-button injection.
 * ``<md3-top-app-bar>`` — Sticky top app bar with scroll state management.
 * ``<md3-nav-tabs>`` — Primary section navigation tabs with keyboard arrow-key
@@ -108,7 +108,7 @@ Compact Density Scale
 
 Technical documentation requires high information density so readers can scan
 navigation trees, API signatures, and data tables without excessive scrolling.
-``paz`` applies the MD3 **-2 (compact)** density scale across the entire theme
+``md3`` applies the MD3 **-2 (compact)** density scale across the entire theme
 via ``--md-sys-density-scale: -2`` and ``--md-density-scale: -2``, reducing
 interactive component heights by ``8px`` relative to default (``0``) density
 while preserving accessible touch and click targets.

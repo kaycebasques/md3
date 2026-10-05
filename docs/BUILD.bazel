@@ -37,7 +37,6 @@ sphinx_build_binary(
     deps = [
         "@deps//sphinx",
         "//md3",
-        "//paz",
     ],
     visibility = ["//visibility:private"],
 )

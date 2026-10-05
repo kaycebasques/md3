@@ -5,7 +5,7 @@ pypi_deps = [
     "@deps//sphinx",
 ]
 
-deps = pypi_deps + [":harness", "//paz", "//md3"]
+deps = pypi_deps + [":harness", "//md3"]
 
 py_library(
     name = "harness",
@@ -27,8 +27,8 @@ py_test(
     name = "test_md3_tokens",
     srcs = ["test_md3_tokens.py"],
     data = [
-        "//paz:theme.toml",
-        "//paz:components/app.css",
+        "//md3:theme.toml",
+        "//md3:components/app.css",
         "@playwright//:chromium",
     ],
     env = {
@@ -62,6 +62,7 @@ py_test(
         "md3_accessibility",
         "md3_deeplinks",
         "md3_progressive_enhancement",
+        "md3_universal_header",
     ]
 ]
 
@@ -80,5 +81,6 @@ test_suite(
         ":test_md3_accessibility",
         ":test_md3_deeplinks",
         ":test_md3_progressive_enhancement",
+        ":test_md3_universal_header",
     ],
 )

@@ -1,5 +1,5 @@
 module(
-    name = "paz",
+    name = "md3",
     version = "0.0.0",
 )
 

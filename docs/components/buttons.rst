@@ -31,7 +31,7 @@ Under the ``-2`` compact density scale, buttons use
 Button Color Variants
 ---------------------
 
-``paz`` provides five standard MD3 button emphasis variants:
+``md3`` provides five standard MD3 button emphasis variants:
 
 1. **Filled (``.md3-btn--filled``)**: High emphasis; background
    ``--md-sys-color-primary`` and text ``--md-sys-color-on-primary``.

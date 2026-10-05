@@ -33,7 +33,7 @@ Progressive Disclosure
 
 Large Sphinx documentation sites (such as monorepos with thousands of documents)
 become unusable when the entire multi-level ``toctree`` is rendered into every
-page's sidebar. ``paz`` solves this in ``paz/__init__.py``
+page's sidebar. ``md3`` solves this in ``md3/__init__.py``
 (``compute_progressive_navigation``) and ``<md3-sidebar>`` using **progressive
 disclosure**:
 

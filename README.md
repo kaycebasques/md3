@@ -9,6 +9,9 @@ An elegant, high-density, complete Sphinx documentation theme compliant with Goo
   * **Progressive Disclosure Left Sidebar (`<md3-sidebar>`)**: Displays **one hierarchy level at a time** with ancestor drill-up back-links, child chevron indicators, MD3 pill active indicators, and a live section filter (`#sidebar-filter-input`) for sections with 8+ items.
   * **Center Content**: Readable documentation container with breadcrumbs, typography scales, admonitions, and pagination cards.
   * **Right On-Page TOC**: Interactive table of contents with scrollspy active heading tracking and smooth scrolling.
+* **Universal Header & Subsite Postprocessing (Doxygen & Rustdoc)**:
+  * Automatically replaces `<!-- md3-sentinel -->` / `<!-- pw-sentinel -->` in external Doxygen and Rustdoc HTML outputs with the `<md3-top-app-bar>`, `<md3-nav-tabs>`, `<md3-search>` modal, `#md3-skip-link`, and `.md3-subsite-breadcrumbs`.
+  * Synchronizes light/dark theme preferences across Sphinx, Doxygen, and Rustdoc (`localStorage.getItem('theme')`, `rustdoc-theme`, `.light-mode` / `.dark-mode` classes) and indexes Doxygen and Rustdoc API documentation into Pagefind search.
 * **Component Documentation & Conformance Deeplinking**:
   * Every component and token family has its own dedicated documentation page under `docs/components/` explaining how it conforms to the Material Design 3 specification and linking directly to the relevant section on `https://m3.material.io/`.
   * When an MD3 conformance test fails, its assertion output deeplinks directly to both the component documentation section (`components/<slug>.html#<section-id>`) and the official `m3.material.io` specification anchor.
@@ -24,7 +27,7 @@ An elegant, high-density, complete Sphinx documentation theme compliant with Goo
   * **Elevation**: 6-level elevation system with ambient and key shadows.
   * **Motion**: MD3 standard and emphasized easing curves and transition durations.
 * **Web Components & Runtime**:
-  * `<md3-app>` / `<paz-app>`: Root application container.
+  * `<md3-app>`: Root application container.
   * `<md3-top-app-bar>`: Sticky small top app bar with scroll elevation states.
   * `<md3-nav-tabs>`: Primary section navigation tabs with keyboard arrow-key navigation.
   * `<md3-sidebar>`: Progressive disclosure navigation drawer with live section filtering.
@@ -80,5 +83,5 @@ html_theme_options = {
 ### Build Wheel Package
 ```bash
 ./bazelisk build :wheel
-# Generates wheel at bazel-bin/paz/md3-0.1.0-py3-none-any.whl
+# Generates wheel at bazel-bin/md3/md3-0.1.0-py3-none-any.whl
 ```

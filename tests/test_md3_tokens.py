@@ -41,7 +41,7 @@ class TestMd3TokensConformance(SphinxTestBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        css_path = Path(__file__).resolve().parent.parent / "paz" / "components" / "app.css"
+        css_path = Path(__file__).resolve().parent.parent / "md3" / "components" / "app.css"
         cls.css_content = css_path.read_text(encoding="utf-8")
 
         cls.light_vars = {}

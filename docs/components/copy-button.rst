@@ -10,7 +10,7 @@ Sphinx ``div.highlight`` code blocks.
 Code Copy Interaction
 ---------------------
 
-During ``<paz-app>`` initialization, ``Md3App.initCodeCopy()`` upgrades every
+During ``<md3-app>`` initialization, ``Md3App.initCodeCopy()`` upgrades every
 ``div.highlight`` block containing a ``<pre>`` element by appending an
 ``<md3-copy-button class="md3-code-copy-btn">`` element:
 

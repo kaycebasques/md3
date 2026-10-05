@@ -526,6 +526,30 @@
   --md-comp-elevated-card-container-color: var(--md-sys-color-surface-container-low);
   --md-comp-elevated-card-container-shape: var(--md-sys-shape-corner-medium);
   --md-comp-elevated-card-container-elevation: var(--md-sys-elevation-level1);
+
+  /* Universal Subsite Token Aliases (--pw-color-* mapped to MD3 system tokens) */
+  --pw-color-bg: var(--md-sys-color-background);
+  --pw-color-surface: var(--md-sys-color-surface-container-low);
+  --pw-color-fg: var(--md-sys-color-on-surface);
+  --pw-color-fg-secondary: var(--md-sys-color-on-surface-variant);
+  --pw-color-border: var(--md-sys-color-outline-variant);
+  --pw-color-primary: var(--md-sys-color-primary);
+  --pw-color-primary-hover: var(--md-sys-color-primary);
+  --pw-color-active-bg: var(--md-sys-color-secondary-container);
+  --pw-color-active-fg: var(--md-sys-color-on-secondary-container);
+  --pw-color-hover-bg: rgba(var(--md-sys-color-on-surface-rgb), var(--md-sys-state-hover-state-layer-opacity));
+  --pw-color-focus-ring: var(--md-sys-color-secondary);
+  --pw-color-input-bg: var(--md-sys-color-surface-container);
+  --pw-color-input-border: var(--md-sys-color-outline);
+  --pw-color-scrim: rgba(0, 0, 0, 0.32);
+  --pw-color-shadow: rgba(0, 0, 0, 0.2);
+
+  /* Universal Header Height (56px app bar + 36px breadcrumbs = 92px; + 36px nav tabs = 128px) */
+  --md3-universal-header-height: 92px;
+}
+
+:root:has(#md3-universal-header md3-nav-tabs) {
+  --md3-universal-header-height: 128px;
 }
 
 /* --------------------------------------------------------------------------
@@ -534,6 +558,8 @@
 [data-theme="dark"],
 html[data-theme="dark"],
 :root[data-theme="dark"],
+html.dark-mode,
+html[data-mode="dark"],
 :root.no-js:has(#md3-theme-menu input[name="theme"][value="dark"]:checked) {
   --md-sys-color-primary: #a8c7fa;
   --md-sys-color-on-primary: #062e6f;
@@ -600,6 +626,8 @@ html[data-theme="dark"],
 [data-theme="light"],
 html[data-theme="light"],
 :root[data-theme="light"],
+html.light-mode,
+html[data-mode="light"],
 :root.no-js:has(#md3-theme-menu input[name="theme"][value="light"]:checked) {
   --md-sys-color-primary: #0b57d0;
   --md-sys-color-on-primary: #ffffff;
@@ -790,7 +818,20 @@ html[data-theme="light"],
 /* --------------------------------------------------------------------------
    4. Base & Reset
    -------------------------------------------------------------------------- */
-*, *::before, *::after {
+md3-app,
+md3-app *,
+md3-app *::before,
+md3-app *::after,
+.md3-universal-header,
+.md3-universal-header *,
+.md3-universal-header *::before,
+.md3-universal-header *::after,
+.md3-search-dialog,
+.md3-search-dialog *,
+.md3-search-dialog *::before,
+.md3-search-dialog *::after,
+.md3-skip-link,
+.md3-backdrop {
   box-sizing: border-box;
 }
 
@@ -801,24 +842,27 @@ html {
 
 body, #body {
   margin: 0;
-  padding: 0;
-  font-family: var(--md-ref-typeface-plain);
-  font-size: var(--md-sys-typescale-body-medium-size);
-  line-height: var(--md-sys-typescale-body-medium-line-height);
   color: var(--md-sys-color-on-background);
   background-color: var(--md-sys-color-background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-paz-app, md3-app {
+body:has(md3-app), #body {
+  padding: 0;
+  font-family: var(--md-ref-typeface-plain);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+md3-app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
 }
 
-paz-app [hidden], md3-app [hidden] {
+md3-app [hidden] {
   display: none !important;
 }
 
@@ -1951,7 +1995,9 @@ md3-toc,
   color: var(--md-sys-color-on-surface);
 }
 
-code, tt {
+md3-app code,
+md3-app tt,
+.md3-search-dialog code {
   font-family: var(--md-ref-typeface-code);
   font-size: 0.875em;
   padding: 2px 6px;
@@ -1960,7 +2006,8 @@ code, tt {
   color: var(--md-sys-color-on-surface);
 }
 
-pre code {
+md3-app pre code,
+.md3-search-dialog pre code {
   padding: 0;
   background-color: transparent;
   font-size: inherit;
@@ -2320,6 +2367,42 @@ md3-search {
   display: none;
 }
 
+.md3-search-mobile-btn {
+  display: none;
+}
+
+/* Skip to Main Content Accessibility Link */
+.md3-skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 2000;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  padding: 6px 16px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-ref-typeface-plain);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--md-sys-elevation-level2);
+  transition: top var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.md3-skip-link:focus,
+.md3-skip-link:focus-visible {
+  top: 12px;
+  outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
+  outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
+}
+
+#main:focus,
+#doc-content:focus,
+#main-content:focus,
+#main-content:target {
+  outline: none !important;
+}
+
 /* Responsive Breakpoints: Expanded (<1200px) & Compact/Medium (<840px) */
 @media (max-width: 1199px) {
   /* Collapse Column 3 (TOC) below Large (1200px) window size class */
@@ -2332,6 +2415,10 @@ md3-search {
 @media (max-width: 839px) {
   /* Compact (<600px) & Medium (600px–839px): Modal Navigation Drawer */
   .md3-drawer-toggle {
+    display: inline-flex;
+  }
+
+  .md3-search-mobile-btn {
     display: inline-flex;
   }
 
@@ -2372,5 +2459,293 @@ md3-search {
 
   .md3-top-app-bar__center {
     display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   17. Universal Header & External Subsite Integration (Doxygen & Rustdoc)
+   -------------------------------------------------------------------------- */
+.md3-universal-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: var(--md-sys-color-surface);
+  font-family: var(--md-ref-typeface-plain);
+}
+
+body:has(#md3-universal-header) {
+  padding-top: var(--md3-universal-header-height, 128px) !important;
+}
+
+body:has(#md3-universal-header) .md3-backdrop,
+body:has(#md3-universal-header) .md3-backdrop::before {
+  top: var(--md3-universal-header-height, 128px);
+  height: calc(100vh - var(--md3-universal-header-height, 128px));
+}
+
+.md3-subsite-breadcrumbs {
+  margin: 0;
+  padding: 0 16px;
+  height: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  background-color: var(--md-sys-color-surface);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.md3-subsite-breadcrumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.md3-subsite-breadcrumbs .md3-breadcrumbs__list {
+  flex-wrap: nowrap;
+}
+
+.md3-breadcrumbs__home {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Rustdoc Subsite Theme & Layout Integration */
+label[for="theme-ayu"] {
+  display: none !important;
+}
+
+:root[data-theme="light"],
+:root[data-theme="dark"],
+:root.light-mode,
+:root.dark-mode {
+  --main-background-color: var(--md-sys-color-background) !important;
+  --main-color: var(--md-sys-color-on-surface) !important;
+  --src-sidebar-background-selected: var(--md-sys-color-secondary-container) !important;
+  --src-sidebar-background-hover: rgba(var(--md-sys-color-on-surface-rgb), var(--md-sys-state-hover-state-layer-opacity)) !important;
+  --sidebar-background-color: var(--md-sys-color-surface-container-low) !important;
+  --sidebar-background-color-hover: rgba(var(--md-sys-color-on-surface-rgb), var(--md-sys-state-hover-state-layer-opacity)) !important;
+  --sidebar-current-link-background-color: var(--md-sys-color-secondary-container) !important;
+  --sidebar-border-color: var(--md-sys-color-outline-variant) !important;
+  --code-block-background-color: var(--md-sys-color-surface-container) !important;
+  --border-color: var(--md-sys-color-outline-variant) !important;
+  --headings-border-bottom-color: var(--md-sys-color-outline-variant) !important;
+  --button-background-color: var(--md-sys-color-surface-container) !important;
+  --toggles-color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+body.rustdoc:has(#md3-universal-header) rustdoc-topbar,
+body.rustdoc:has(#md3-universal-header) .skip-main-content {
+  display: none !important;
+}
+
+body.rustdoc:has(#md3-universal-header) nav.sidebar,
+body.rustdoc:has(#md3-universal-header) .sidebar,
+body:has(#md3-universal-header):has(> nav.sidebar) .sidebar {
+  position: sticky !important;
+  top: var(--md3-universal-header-height, 128px) !important;
+  height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+  background-color: var(--md-sys-color-surface-container-low) !important;
+  border-right: 1px solid var(--md-sys-color-outline-variant) !important;
+}
+
+body.rustdoc:has(#md3-universal-header) .sidebar-resizer,
+body:has(#md3-universal-header):has(> nav.sidebar) .sidebar-resizer {
+  top: var(--md3-universal-header-height, 128px) !important;
+  height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+}
+
+html.sidebar-resizing > body:has(#md3-universal-header) {
+  padding-left: 0 !important;
+}
+
+body.rustdoc:has(#md3-universal-header) #sidebar-button,
+.hide-sidebar body.rustdoc:has(#md3-universal-header) #sidebar-button,
+.src body.rustdoc:has(#md3-universal-header) #sidebar-button {
+  top: calc(var(--md3-universal-header-height, 128px) + 8px) !important;
+}
+
+@media (max-width: 839px) {
+  body.rustdoc:has(#md3-universal-header) {
+    display: block !important;
+    padding-top: var(--md3-universal-header-height, 128px) !important;
+  }
+
+  body.rustdoc:has(#md3-universal-header) .sidebar-resizer {
+    display: none !important;
+  }
+
+  body.rustdoc:has(#md3-universal-header) nav.sidebar,
+  body.rustdoc:has(#md3-universal-header) .sidebar {
+    position: fixed !important;
+    top: var(--md3-universal-header-height, 128px) !important;
+    left: -1000px !important;
+    width: min(280px, 80vw) !important;
+    height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+    z-index: 200 !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
+    transition: left var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
+  }
+
+  body.rustdoc:has(#md3-universal-header) nav.sidebar.shown,
+  body.rustdoc:has(#md3-universal-header) .sidebar.shown,
+  html.src-sidebar-expanded body.rustdoc.src:has(#md3-universal-header) nav.sidebar {
+    left: 0 !important;
+    box-shadow: var(--md-sys-elevation-level3) !important;
+  }
+
+  body.rustdoc:has(#md3-universal-header) main {
+    padding: 16px !important;
+  }
+}
+
+/* Doxygen Subsite Theme & Layout Integration */
+html[data-theme]:has(#md3-universal-header[data-subsite="doxygen"]),
+html:has(#md3-universal-header[data-subsite="doxygen"]) {
+  --pw-font-body: var(--md-ref-typeface-plain);
+  --pw-font-code: var(--md-ref-typeface-code);
+  --pw-font-headings: var(--md-ref-typeface-brand);
+  --pw-color-background-primary: var(--md-sys-color-background);
+  --pw-color-background-secondary: var(--md-sys-color-surface-container-low);
+  --pw-color-background-code: var(--md-sys-color-surface-container);
+  --pw-color-brand-primary: var(--md-sys-color-primary);
+  --pw-color-brand-secondary: var(--md-sys-color-secondary);
+  --pw-color-foreground-primary: var(--md-sys-color-on-surface);
+  --pw-color-link: var(--md-sys-color-primary);
+  --pw-color-nav-active: var(--md-sys-color-primary);
+  --pw-color-nav-inactive: var(--md-sys-color-on-surface-variant);
+  --page-background-color: var(--md-sys-color-background);
+  --page-foreground-color: var(--md-sys-color-on-surface);
+  --page-link-color: var(--md-sys-color-primary);
+  --page-visited-link-color: var(--md-sys-color-primary);
+  --index-odd-item-bg-color: var(--md-sys-color-background);
+  --index-even-item-bg-color: var(--md-sys-color-background);
+  --index-header-color: var(--md-sys-color-on-surface);
+  --index-separator-color: var(--md-sys-color-outline-variant);
+  --header-background-color: var(--md-sys-color-background);
+  --group-header-color: var(--md-sys-color-on-surface);
+  --title-background-color: var(--md-sys-color-surface-container-low);
+  --separator-color: var(--md-sys-color-outline-variant);
+  --memdecl-background-color: var(--md-sys-color-background);
+  --memdecl-foreground-color: var(--md-sys-color-on-surface);
+  --memdecl-separator-color: var(--md-sys-color-outline-variant);
+  --memdecl-template-color: var(--md-sys-color-on-surface);
+  --memdef-border-color: var(--md-sys-color-outline-variant);
+  --memdef-title-background-color: var(--md-sys-color-surface-container-low);
+  --memdef-proto-background-color: var(--md-sys-color-surface-container-low);
+  --memdef-proto-text-color: var(--md-sys-color-on-surface);
+  --memdef-proto-text-shadow: none;
+  --memdef-doc-background-color: var(--md-sys-color-background);
+  --memdef-param-name-color: var(--md-sys-color-on-surface);
+  --memdef-template-color: var(--md-sys-color-on-surface);
+  --table-cell-border-color: var(--md-sys-color-outline-variant);
+  --table-header-background-color: var(--md-sys-color-surface-container);
+  --table-header-foreground-color: var(--md-sys-color-on-surface);
+  --nav-background-color: var(--md-sys-color-surface-container-low);
+  --nav-foreground-color: var(--md-sys-color-on-surface);
+  --nav-breadcrumb-border-color: var(--md-sys-color-outline-variant);
+  --nav-text-normal-color: var(--md-sys-color-on-surface-variant);
+  --nav-text-hover-color: var(--md-sys-color-primary);
+  --nav-text-active-color: var(--md-sys-color-primary);
+  --nav-arrow-color: var(--md-sys-color-on-surface-variant);
+  --nav-arrow-selected-color: var(--md-sys-color-primary);
+  --toc-background-color: var(--md-sys-color-surface-container-low);
+  --toc-border-color: var(--md-sys-color-outline-variant);
+  --toc-header-color: var(--md-sys-color-on-surface);
+  --fragment-foreground-color: var(--md-sys-color-on-surface);
+  --fragment-background-color: var(--md-sys-color-surface-container);
+  --fragment-border-color: var(--md-sys-color-outline-variant);
+  --blockquote-background-color: var(--md-sys-color-surface-container-low);
+  --blockquote-border-color: var(--md-sys-color-primary);
+  --scrollbar-thumb-color: var(--md-sys-color-outline-variant);
+  --scrollbar-background-color: var(--md-sys-color-surface-container-low);
+}
+
+body:has(#md3-universal-header[data-subsite="doxygen"]) #navrow1,
+body:has(#md3-universal-header[data-subsite="doxygen"]) #titlearea,
+body:has(#md3-universal-header[data-subsite="doxygen"]) dark-mode-toggle {
+  display: none !important;
+}
+
+body:has(#md3-universal-header[data-subsite="doxygen"]) #side-nav {
+  position: fixed !important;
+  top: var(--md3-universal-header-height, 128px) !important;
+  left: 0;
+  width: 250px;
+  height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+  max-height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+  background-color: var(--md-sys-color-surface-container-low);
+  border-right: 1px solid var(--md-sys-color-outline-variant);
+}
+
+body:has(#md3-universal-header[data-subsite="doxygen"]) #nav-tree {
+  background-color: var(--md-sys-color-surface-container-low) !important;
+  background-image: none !important;
+  height: 100% !important;
+}
+
+body:has(#md3-universal-header[data-subsite="doxygen"]) #nav-tree .arrow {
+  box-sizing: content-box !important;
+}
+
+body:has(#md3-universal-header[data-subsite="doxygen"]) #nav-tree .selected {
+  background-image: none !important;
+  color: var(--md-sys-color-primary) !important;
+  font-weight: 600;
+}
+
+body:has(#md3-universal-header[data-subsite="doxygen"]) #nav-tree .selected a {
+  color: var(--md-sys-color-primary) !important;
+  font-weight: 600;
+}
+
+body:has(#md3-universal-header[data-subsite="doxygen"]) #doc-content {
+  margin-left: 256px;
+  height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+}
+
+@media (max-width: 839px) {
+  body:has(#md3-universal-header[data-subsite="doxygen"]) #splitbar,
+  body:has(#md3-universal-header[data-subsite="doxygen"]) .ui-resizable-handle {
+    display: none !important;
+  }
+
+  body:has(#md3-universal-header[data-subsite="doxygen"]) #side-nav {
+    display: none !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: var(--md3-universal-header-height, 128px) !important;
+    width: min(280px, 80vw) !important;
+    height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+    max-height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+    background-color: var(--md-sys-color-surface-container-low) !important;
+    z-index: 200 !important;
+    padding: 8px 0 !important;
+    box-sizing: border-box !important;
+    overflow-y: auto !important;
+  }
+
+  body.md3-doxygen-nav-open:has(#md3-universal-header[data-subsite="doxygen"]) #side-nav,
+  body.pw-doxygen-nav-open:has(#md3-universal-header[data-subsite="doxygen"]) #side-nav,
+  body.md3-doxygen-nav-open #side-nav,
+  body.pw-doxygen-nav-open #side-nav {
+    display: block !important;
+    box-shadow: var(--md-sys-elevation-level3) !important;
+  }
+
+  body:has(#md3-universal-header[data-subsite="doxygen"]) #doc-content {
+    margin-left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - var(--md3-universal-header-height, 128px)) !important;
+  }
+
+  body:has(#md3-universal-header[data-subsite="doxygen"]) #nav-path {
+    left: 0 !important;
+    width: 100vw !important;
   }
 }

@@ -2,7 +2,7 @@
 Color System & Tokens
 =========================
 
-``paz`` implements the complete Material Design 3 three-tier token architecture
+``md3`` implements the complete Material Design 3 three-tier token architecture
 (``--md-ref-*``, ``--md-sys-*``, ``--md-comp-*``) and all 26 semantic color
 roles across light and dark themes.
 
@@ -13,7 +13,7 @@ Design Tokens Overview
 
 Design tokens store every visual design attribute—color tones, typography scales,
 corner radii, elevation shadows, state opacities, and spatial increments—as CSS
-custom properties on ``:root`` in ``paz/components/app.css``, eliminating
+custom properties on ``:root`` in ``md3/components/app.css``, eliminating
 hardcoded magic values in component rules.
 
 **MD3 Specification Reference:**

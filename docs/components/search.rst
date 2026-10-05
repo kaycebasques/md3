@@ -53,7 +53,7 @@ invokes ``Md3Search.open()``, which opens ``#md3-search-dialog`` via native
 Pagefind Full-Site Search
 -------------------------
 
-During the ``build-finished`` Sphinx event, ``paz`` indexes all built HTML pages
+During the ``build-finished`` Sphinx event, ``md3`` indexes all built HTML pages
 (scoped to ``[data-pagefind-body]`` and excluding navigation chrome) into
 ``<outdir>/search/pagefind.js`` using ``pagefind.index.PagefindIndex``. Typing
 into ``#md3-search-input`` (or ``#search-input`` on ``search.html``) queries the

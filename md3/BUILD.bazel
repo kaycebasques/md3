@@ -1,9 +1,46 @@
 load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:packaging.bzl", "py_package", "py_wheel")
 
 package(default_visibility = ["//visibility:public"])
 
 py_library(
     name = "md3",
     srcs = ["__init__.py"],
-    deps = ["//paz"],
+    data = [
+        "theme.toml",
+        "domainindex.html",
+        "genindex.html",
+        "layout.html",
+        "page.html",
+        "search.html",
+        "components/app.css",
+        "components/app.js",
+    ],
+    deps = [
+        "@deps//pagefind",
+        "@deps//pagefind_bin_extended",
+    ],
+)
+
+py_package(
+    name = "package",
+    packages = [
+        "md3",
+    ],
+    deps = [
+        ":md3",
+    ],
+)
+
+py_wheel(
+    name = "wheel",
+    distribution = "md3",
+    version = "0.1.0",
+    entry_points = {
+        "sphinx.html_themes": [
+            "md3 = md3",
+            "material3 = md3",
+        ],
+    },
+    deps = [":package"],
 )

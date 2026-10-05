@@ -2,7 +2,7 @@
 Progressive Enhancement & No-JS Mode
 ====================================
 
-``paz`` is architected from the ground up using **Light DOM server-side rendering**
+``md3`` is architected from the ground up using **Light DOM server-side rendering**
 and **progressive enhancement**. Every page is fully readable, navigable, and
 themeable when JavaScript is disabled (``:root.no-js``), while enabling
 JavaScript unlocks instantaneous client-side navigation graph traversal,
@@ -17,9 +17,9 @@ Light DOM Architecture
 All structural HTML—including the top app bar, primary section tabs, progressive
 disclosure navigation drawer, breadcrumbs, article content, on-page table of
 contents, and pagination cards—is rendered directly into the Light DOM at build
-time by Sphinx's Jinja2 templates (``paz/layout.html``):
+time by Sphinx's Jinja2 templates (``md3/layout.html``):
 
-* **No Client-Side Template Dependencies**: Custom elements (``<paz-app>``,
+* **No Client-Side Template Dependencies**: Custom elements (``<md3-app>``,
   ``<md3-top-app-bar>``, ``<md3-nav-tabs>``, ``<md3-sidebar>``, ``<md3-toc>``,
   ``<md3-search>``, ``<md3-theme-toggle>``) wrap semantic HTML landmarks and
   links rather than hiding content inside opaque Shadow DOM roots or requiring
@@ -78,7 +78,7 @@ continue to operate using native HTML5 and CSS features:
 JavaScript Progressive Enhancements
 -----------------------------------
 
-When JavaScript is available, ``paz/components/app.js`` upgrades the Light DOM
+When JavaScript is available, ``md3/components/app.js`` upgrades the Light DOM
 elements in place with richer, instantaneous interactions:
 
 1. **In-Place Navigation Graph Traversal (``<md3-sidebar>``)**:

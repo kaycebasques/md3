@@ -2,7 +2,7 @@
 Typography
 =========================
 
-``paz`` implements the complete 15-role Material Design 3 typescale across its
+``md3`` implements the complete 15-role Material Design 3 typescale across its
 three-tier design token architecture, optimized for long-form technical reading.
 
 .. _typescale-tokens:

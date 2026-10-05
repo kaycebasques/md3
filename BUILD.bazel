@@ -20,12 +20,12 @@ alias(
 
 alias(
     name = "wheel",
-    actual = "//paz:wheel",
+    actual = "//md3:wheel",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "publish",
-    actual = "//paz:wheel.publish",
+    actual = "//md3:wheel.publish",
     visibility = ["//visibility:public"],
 )

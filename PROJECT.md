@@ -4,7 +4,7 @@
 
 This project provides an elegant, complete, production-grade [Sphinx](https://www.sphinx-doc.org) HTML documentation theme compliant with Google's **Material Design 3 (MD3)** design system.
 
-The project is published to PyPI as a Python wheel (`md3-0.1.0-py3-none-any.whl`), built and orchestrated hermetically using [Bazel](https://bazel.build) via `./bazelisk`. It provides dual-theme and dual-extension registration (`extensions = ["md3"]` / `html_theme = "md3"`, with backward-compatible aliases for `material3` and `paz`).
+The project is published to PyPI as a Python wheel (`md3-0.1.0-py3-none-any.whl`), built and orchestrated hermetically using [Bazel](https://bazel.build) via `./bazelisk`. It provides theme and extension registration (`extensions = ["md3"]` / `html_theme = "md3"`, with an alias for `material3`).
 
 ### Primary Objectives
 
@@ -29,7 +29,7 @@ The project is published to PyPI as a Python wheel (`md3-0.1.0-py3-none-any.whl`
 
 ## 2. Core Architectural Pillars
 
-### 2.1 Material Design 3 Token System (`paz/components/app.css`)
+### 2.1 Material Design 3 Token System (`md3/components/app.css`)
 
 The stylesheet implements a complete three-tier token hierarchy (Reference -> System -> Component) derived from official Material Design 3 tokens:
 
@@ -84,7 +84,7 @@ In developer documentation, oversized buttons and excessive whitespace hinder re
 
 ---
 
-### 2.3 Responsive Window Size Classes & Layout (`paz/layout.html`, `paz/components/app.css`)
+### 2.3 Responsive Window Size Classes & Layout (`md3/layout.html`, `md3/components/app.css`)
 
 The layout container adapts dynamically based on official MD3 window size class breakpoints:
 
@@ -102,11 +102,11 @@ The layout container adapts dynamically based on official MD3 window size class 
 
 ---
 
-### 2.4 Web Components Runtime (`paz/components/app.js`)
+### 2.4 Web Components Runtime (`md3/components/app.js`)
 
 All interactive functionality is implemented as native Web Components with zero external JavaScript dependencies:
 
-1. **`<md3-app>` / `<paz-app>`**: Root custom element orchestrating theme initialization and code copy button upgrades.
+1. **`<md3-app>`**: Root custom element orchestrating theme initialization and code copy button upgrades.
 2. **`<md3-top-app-bar>`**: Sticky top app bar that uses `--md-comp-top-app-bar-small-container-color` (`surface`) and Level 0 elevation at rest, and transitions to `--md-comp-top-app-bar-small-on-scroll-container-color` (`surface-container`) with Level 2 elevation (`var(--md-sys-elevation-level2)`) when scrolled (`window.scrollY > 4`).
 3. **`<md3-sidebar>`**: Responsive navigation drawer supporting persistent desktop display (`>=840px`), modal drawer behavior (`<840px`), `Escape`/scrim dismissal, and focus restoration to `#drawer-toggle`.
 4. **`<md3-toc>`**: On-page table of contents with `IntersectionObserver` scrollspy and smooth back-to-top scrolling.
@@ -129,9 +129,9 @@ All interactive functionality is implemented as native Web Components with zero 
 
 ---
 
-### 2.6 Progressive Enhancement & Light DOM Rendering (`paz/layout.html`, `paz/components/app.css`, `paz/components/app.js`)
+### 2.6 Progressive Enhancement & Light DOM Rendering (`md3/layout.html`, `md3/components/app.css`, `md3/components/app.js`)
 
-Following the architectural patterns in `~/tw`, all documentation content and navigation structures are rendered into the Light DOM at build time by Jinja templates (`paz/layout.html`), and JavaScript is used strictly for progressive enhancements:
+Following the architectural patterns in `~/tw`, all documentation content and navigation structures are rendered into the Light DOM at build time by Jinja templates (`md3/layout.html`), and JavaScript is used strictly for progressive enhancements:
 
 * **Light DOM Jinja Rendering**: Global navigation (`toctree`), page table of contents (`toc`), breadcrumbs, theme selector form controls, and article content are rendered directly into the Light DOM so all content is immediately accessible when JavaScript is disabled.
 * **Mobile "On this page" TOC Access**: On Compact, Medium, and Expanded viewports (`<1200px`) where the right-hand TOC column is collapsed, a compact `#toc-mobile-btn` (`popovertarget="md3-toc-mobile-menu"`) in `.md3-content-nav-bar` opens the `#md3-toc-mobile-menu` popover without JavaScript (via mouse, touch, or keyboard `Enter`/`Space`/`Escape`). When JavaScript is enabled, clicking a section link inside `#md3-toc-mobile-menu` automatically dismisses the popover.
@@ -198,8 +198,10 @@ All tests are located in `tests/` and run hermetically through Bazel:
 | `//tests:test_md3_sphinx_elements` | Sphinx docutils & Pygments rendering | Admonition containers, light/dark Pygments CSS, `tabular-nums` tables, cards, dividers, underlined inline links, pagination, breadcrumbs |
 | `//tests:test_md3_accessibility` | Keyboard nav & ARIA semantics | High-contrast focus rings (`3px`/`2px`/`-3px`), state layers, 38% disabled opacity, ARIA landmark roles, icon button tooltips |
 | `//tests:test_md3_progressive_enhancement` | No-JS & progressive enhancement verification | Mobile TOC popover, no-JS mobile nav drawer (mouse & keyboard), no-JS theme switching (`:has()`), no-JS back-to-top, Light DOM rendering |
-| `//tests:test_md3_deeplinks` | Meta-verification of spec deeplinks | Validates all 67 catalog URLs & UUID fragments, `KeyError` on invalid keys, and per-assertion `spec_context` attribution |
-| `//tests:test_app` | Sphinx build verification | Verifies theme builds under both `md3` and `paz` extension configurations |
+| `//tests:test_md3_navigation` | Large-site navigation scalability | `<md3-nav-tabs>` active hierarchy & keyboard navigation, 1-level progressive disclosure, live filtering, in-place JS graph traversal |
+| `//tests:test_md3_universal_header` | Universal header & subsite postprocessing | Doxygen & Rustdoc sentinel injection, cross-subsite theme sync, universal breadcrumbs, subsite mobile drawer, skip link, Pagefind subsite indexing |
+| `//tests:test_md3_deeplinks` | Meta-verification of spec deeplinks | Validates all 78 catalog URLs & UUID fragments, `KeyError` on invalid keys, and per-assertion `spec_context` attribution |
+| `//tests:test_app` | Sphinx build verification | Verifies theme builds under both `md3` and `material3` configurations |
 | `//tests:test_html` | Base HTML structure | Verifies DOCTYPE, meta tags, and document title |
 | `//tests:test_runtime` | Web Component lifecycle | Verifies basic runtime bootstrapping |
 
@@ -220,12 +222,9 @@ All tests are located in `tests/` and run hermetically through Bazel:
 │   ├── index.rst              # Documentation home page
 │   ├── tokens.rst             # Design tokens reference page
 │   └── components.rst         # Component specimens page
-├── md3/                       # Primary Python package
-│   ├── BUILD.bazel            # py_library target
-│   └── __init__.py            # setup() hook registering md3 theme
-├── paz/                       # Theme implementation & asset distribution
+├── md3/                       # Theme implementation & asset distribution
 │   ├── BUILD.bazel            # py_library, py_package, and py_wheel targets
-│   ├── __init__.py            # Sphinx extension setup and static paths
+│   ├── __init__.py            # Sphinx extension setup, subsite postprocessor, and Pagefind indexer
 │   ├── theme.toml             # Sphinx theme definition
 │   ├── layout.html            # Main Jinja2 layout (3-column scaffold + Web Components)
 │   ├── page.html              # Article page template
@@ -237,7 +236,7 @@ All tests are located in `tests/` and run hermetically through Bazel:
 └── tests/                     # Conformance test suite
     ├── BUILD.bazel            # Bazel py_test targets and test_suite
     ├── harness.py             # SphinxTestBase test harness with in-process HTTP server
-    ├── md3_spec.py            # MD3 spec catalog (67 verified deeplinks), failure banners, and decorators
+    ├── md3_spec.py            # MD3 spec catalog (78 verified deeplinks), failure banners, and decorators
     ├── test_app.py            # Theme loading & extension tests
     ├── test_html.py           # Base HTML tests
     ├── test_runtime.py        # Base runtime tests
@@ -245,8 +244,11 @@ All tests are located in `tests/` and run hermetically through Bazel:
     ├── test_md3_density.py    # Compact information density & shape morph tests
     ├── test_md3_layout.py     # Window size class & responsive drawer tests
     ├── test_md3_components.py # Interactive Web Component & scroll state tests
+    ├── test_md3_navigation.py # Top-level tabs & 1-level progressive disclosure tests
+    ├── test_md3_progressive_enhancement.py # No-JS & progressive enhancement tests
     ├── test_md3_sphinx_elements.py # Admonitions, tables, links, cards, dividers, Pygments tests
     ├── test_md3_accessibility.py   # Focus rings, state layers, disabled states, tooltips, ARIA tests
+    ├── test_md3_universal_header.py # Universal header & Doxygen/Rustdoc postprocessing tests
     └── test_md3_deeplinks.py  # Conformance deeplink & context attribution validation tests
 ```
 
@@ -283,7 +285,7 @@ Always use the `./bazelisk` wrapper at the repository root:
 ```bash
 ./bazelisk build :wheel
 # Inspect generated wheel:
-unzip -l bazel-bin/paz/md3-0.1.0-py3-none-any.whl
+unzip -l bazel-bin/md3/md3-0.1.0-py3-none-any.whl
 ```
 
 ### Build Everything Across the Workspace
@@ -300,6 +302,6 @@ When extending or modifying the theme, verify the following:
 - [ ] **Information Density**: Buttons must remain compact (height <= 36px, target 32px), nav items <= 36px (target 32px), search bar <= 40px (target 36px), table vertical padding <= 12px (target 8px).
 - [ ] **Token System**: All colors, shapes, spacings, and elevations must reference `--md-sys-*`, `--md-comp-*`, or `--md-ref-palette-*` tokens; do not hardcode ad-hoc hex colors. Both Light and Dark theme definitions must be maintained.
 - [ ] **WCAG AA Contrast**: Ensure any foreground/background color pair satisfies at least 4.5:1 contrast.
-- [ ] **Web Components**: Interactive features must be built as Custom Elements in `app.js` and declared in `paz/layout.html`.
+- [ ] **Web Components**: Interactive features must be built as Custom Elements in `app.js` and declared in `md3/layout.html`.
 - [ ] **Conformance Deeplinks**: Any new conformance assertion must use `@md3_conformance(spec_key="...")` or `with self.spec_context(spec_key="..."):` pointing to a verified `https://m3.material.io/<tab_path>#<pageContentBlockCanonId>` URL in `tests/md3_spec.py`.
 - [ ] **Hermetic Verification**: All tests in `//tests` must pass with `./bazelisk test //tests --nocache_test_results`.

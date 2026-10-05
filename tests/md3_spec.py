@@ -818,6 +818,38 @@ MD3_SPECS: Dict[str, Dict[str, str]] = {
             "across ancestor and child levels without reloading the page."
         ),
     },
+    "COMPONENTS_UNIVERSAL_HEADER": {
+        "url": "https://m3.material.io/components/app-bars/specs#fac99130-8bb8-498c-8cb8-16ea056cc3e1",
+        "section": "Components > App bars > Specs > Measurements > Small app bar",
+        "doc_url": "components/top-app-bar.html#universal-subsite-header",
+        "doc_section": "Components > Top App Bar > Universal Header & Subsite Postprocessing",
+        "requirement": (
+            "External Doxygen and Rustdoc subsites containing <!-- md3-sentinel --> or <!-- pw-sentinel --> "
+            "are postprocessed with the universal MD3 header, skip link, mobile drawer toggle, search dialog, "
+            "and local/staging URL rewriting."
+        ),
+    },
+    "COMPONENTS_CROSS_SUBSITE_THEME_SYNC": {
+        "url": "https://m3.material.io/styles/color/system/how-the-system-works#6e7242c4-8bea-4f96-b47a-c91a43181d18",
+        "section": "Styles > Color > System > How the system works > 5. The algorithm assigns tones to color roles",
+        "doc_url": "components/theme-toggle.html#cross-subsite-theme-sync",
+        "doc_section": "Components > Theme Toggle > Cross-Subsite Theme Synchronization",
+        "requirement": (
+            "Theme toggle synchronizes data-theme, data-mode, .light-mode/.dark-mode classes, --pw-color-* "
+            "tokens, and localStorage (including rustdoc-theme) across Sphinx, Doxygen, and Rustdoc subsites "
+            "with SecurityError resilience and bfcache pageshow support."
+        ),
+    },
+    "COMPONENTS_UNIVERSAL_BREADCRUMBS": {
+        "url": "https://m3.material.io/foundations/designing/structure#b892ce17-68d6-4873-91f1-3c481359effd",
+        "section": "Foundations > Accessible design > Structure > Hierarchy > Navigation",
+        "doc_url": "components/breadcrumbs.html#universal-subsite-breadcrumbs",
+        "doc_section": "Components > Breadcrumbs > Universal Subsite Breadcrumbs",
+        "requirement": (
+            "Universal breadcrumbs render full ancestor chains on Sphinx pages and hierarchical "
+            "Home / C++ API or Home / Rust API breadcrumbs on postprocessed Doxygen and Rustdoc subsites."
+        ),
+    },
 }
 
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ language|default('en') }}" class="no-js">
+<html lang="{{ language|default('en') }}" class="no-js" data-content_root="{{ content_root|default(md3_site_root_prefix|default('./', true), true) }}"{% if html_baseurl %} data-baseurl="{{ html_baseurl }}"{% endif %}>
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -7,6 +7,11 @@
     <meta name="description" content="{{ meta.desc }}"/>
     {%- endif %}
     <title>{% block title %}{{ title }}{% endblock %}</title>
+    {%- if favicon_url %}
+    <link rel="icon" href="{{ favicon_url }}"/>
+    {%- elif favicon %}
+    <link rel="icon" href="{{ pathto('_static/' + favicon, 1) }}"/>
+    {%- endif %}
     {%- for css in css_files %}
       {%- if css.filename.endswith('pygments_dark.css') %}
     <link id="pygments_dark_css" rel="stylesheet" href="{{ pathto(css.filename, 1) }}" type="text/css" media="(prefers-color-scheme: dark)"/>
@@ -16,27 +21,47 @@
     {%- endfor %}
     <script>
       (function() {
+        document.documentElement.classList.remove('no-js');
+        var theme = null;
         try {
-          document.documentElement.classList.remove('no-js');
-          let theme = localStorage.getItem('theme');
-          if (theme !== 'light' && theme !== 'dark') {
-            theme = null;
+          var storedTheme = window.localStorage.getItem('theme');
+          var storedMode = window.localStorage.getItem('mode');
+          if (storedTheme === 'auto') {
+            window.localStorage.removeItem('theme');
+            storedTheme = null;
           }
-          if (!theme) {
-            theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          if (storedMode === 'auto') {
+            window.localStorage.removeItem('mode');
+            storedMode = null;
           }
-          document.documentElement.dataset.theme = theme;
-          const darkCss = document.getElementById('pygments_dark_css');
-          if (darkCss) {
-            darkCss.media = theme === 'dark' ? 'all' : 'not all';
+          if (storedTheme === 'light' || storedTheme === 'dark') {
+            theme = storedTheme;
+          } else if (storedMode === 'light' || storedMode === 'dark') {
+            theme = storedMode;
           }
         } catch (e) {}
+        if (!theme) {
+          try {
+            theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          } catch (e) {
+            theme = 'light';
+          }
+        }
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.mode = theme;
+        document.documentElement.classList.remove('light-mode', 'dark-mode', 'auto-mode');
+        document.documentElement.classList.add(theme + '-mode');
+        var darkCss = document.getElementById('pygments_dark_css');
+        if (darkCss) {
+          darkCss.media = theme === 'dark' ? 'all' : 'not all';
+        }
       })();
     </script>
     <script src="{{ pathto('_static/app.js', 1) }}" data-pagefind-js="{{ pathto('search/pagefind.js', 1) }}" type="module"></script>
   </head>
   <body id="body" {% block body_class %}{% endblock %}>
-    <paz-app class="md3-app" data-density="compact">
+    <md3-app class="md3-app" data-density="compact">
+      <a class="md3-skip-link" id="md3-skip-link" href="#main" data-pagefind-ignore="all">Skip to main content</a>
       <!-- Top App Bar (Header) -->
       <md3-top-app-bar class="md3-top-app-bar" role="banner">
         <div class="md3-top-app-bar__start">
@@ -46,8 +71,9 @@
             </svg>
           </button>
           <a class="md3-brand" href="{{ pathto(master_doc) }}" aria-label="{{ docstitle|default(project) }}">
-            {%- if theme_logo %}
-            <img src="{{ pathto('_static/' + theme_logo, 1) }}" alt="{{ project }}" class="md3-brand__logo"/>
+            {%- set resolved_logo = logo_url or (pathto('_static/' + logo, 1) if logo else (theme_logo if '://' in (theme_logo or '') else (pathto('_static/' + theme_logo, 1) if theme_logo else ''))) %}
+            {%- if resolved_logo %}
+            <img src="{{ resolved_logo }}" alt="{{ project }} logo" class="md3-brand__logo"/>
             {%- endif %}
             <span class="md3-brand__title">{{ theme_site_title|default(project, true) }}</span>
           </a>
@@ -64,8 +90,13 @@
         </div>
 
         <div class="md3-top-app-bar__end">
+          <button type="button" class="md3-icon-btn md3-search-mobile-btn" id="search-mobile-trigger" aria-label="Search documentation" title="Search documentation">
+            <svg class="md3-icon" viewBox="0 0 24 24" width="20" height="20">
+              <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+          </button>
           {%- if theme_repo_url %}
-          <a class="md3-icon-btn" href="{{ theme_repo_url }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository" title="GitHub Repository">
+          <a class="md3-icon-btn md3-source-link" id="md3-source-link" href="{{ theme_repo_url }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository" title="GitHub Repository">
             <svg class="md3-icon" viewBox="0 0 24 24" width="20" height="20">
               <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
             </svg>
@@ -209,10 +240,10 @@
           <div class="md3-main__inner">
             <div class="md3-content-nav-bar">
               <!-- Breadcrumb Navigation -->
-              <nav class="md3-breadcrumbs" aria-label="Breadcrumb">
+              <nav class="md3-breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore="all">
                 <ol class="md3-breadcrumbs__list">
                   <li class="md3-breadcrumbs__item"><a href="{{ pathto(master_doc) }}">{{ project }}</a></li>
-                  {%- for parent in parents %}
+                  {%- for parent in (parents or md3_breadcrumb_parents or []) %}
                   <li class="md3-breadcrumbs__separator" aria-hidden="true">/</li>
                   <li class="md3-breadcrumbs__item"><a href="{{ parent.link }}">{{ parent.title }}</a></li>
                   {%- endfor %}
@@ -344,6 +375,6 @@
           </div>
         </dialog>
       </md3-search>
-    </paz-app>
+    </md3-app>
   </body>
 </html>

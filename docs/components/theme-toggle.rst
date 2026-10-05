@@ -55,3 +55,28 @@ active MD3 surface palette.
 
 **MD3 Specification Reference:**
 `Styles > Color > System > How the system works > 5. The algorithm assigns tones to color roles <https://m3.material.io/styles/color/system/how-the-system-works#6e7242c4-8bea-4f96-b47a-c91a43181d18>`_
+
+.. _cross-subsite-theme-sync:
+
+Cross-Subsite Theme Sync
+------------------------
+
+``<md3-theme-toggle>`` synchronizes light and dark color schemes across Sphinx,
+Doxygen, and Rustdoc subsites:
+
+* **Unified DOM & Storage State**: ``applyTheme(theme)`` sets ``data-theme`` and
+  ``data-mode`` on ``<html>``, toggles ``.light-mode`` / ``.dark-mode`` classes,
+  and persists ``theme``, ``mode``, ``rustdoc-theme``, and
+  ``rustdoc-use-system-theme`` in ``localStorage`` via ``SecurityError``-safe
+  storage helpers.
+* **Subsite Token Mapping**: ``app.css`` maps ``--pw-color-*``, Doxygen
+  ``--page-*`` / ``--nav-*``, and Rustdoc ``--main-*`` / ``--sidebar-*`` CSS
+  variables directly to ``var(--md-sys-color-*)`` tokens.
+* **OS & BFCache Sync**: Automatically cleans up legacy ``auto`` storage values,
+  listens to ``prefers-color-scheme`` media query changes when no explicit
+  preference is stored, and re-synchronizes state on ``pageshow`` (bfcache)
+  events.
+
+**MD3 Specification Reference:**
+`Styles > Color > System > How the system works > 5. The algorithm assigns tones to color roles <https://m3.material.io/styles/color/system/how-the-system-works#6e7242c4-8bea-4f96-b47a-c91a43181d18>`_
+

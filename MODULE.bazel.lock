@@ -285,7 +285,7 @@
     "@@rules_playwright+//playwright:extensions.bzl%playwright": {
       "general": {
         "bzlTransitiveDigest": "rw8qfqG4G1hURp35Ba1FcmSUhGIjP8a52xRPV10xbhY=",
-        "usagesDigest": "fBJaFN6B9NbNcIx9UEH93Xhn/DPf4QZZwXAxClqH74s=",
+        "usagesDigest": "0X6GWWVtoGtqPqealuEWfcvKTCqdSNHQmuorbttxCLU=",
         "recordedInputs": [
           "REPO_MAPPING:rules_playwright+,bazel_tools bazel_tools",
           "FILE:@@rules_playwright+//tools/release/artifacts/cli-x86_64-unknown-linux-musl c478e5f07bc0a2b513ff7e7d9f33e9420e8f3bac4ec058c3e3bf332bff8362a1"
@@ -2324,7 +2324,7 @@
     "@@rules_python+//python/uv:uv.bzl%uv": {
       "general": {
         "bzlTransitiveDigest": "yG9F6L2IZXKRbD/aIUa6sU7uITLUTBKOMWPbIvl1VdM=",
-        "usagesDigest": "IZfC65bYqHXW93Pkk2DV8HB4Wcj1zY7lfjUrxb6DXVo=",
+        "usagesDigest": "EKBlCMwijYztJkRJcaZPnvSg67mtbmxhKFxbC2roAfI=",
         "recordedInputs": [
           "REPO_MAPPING:rules_python+,bazel_tools bazel_tools",
           "REPO_MAPPING:rules_python+,platforms platforms"

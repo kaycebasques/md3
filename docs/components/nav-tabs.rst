@@ -14,7 +14,7 @@ Primary Navigation Tabs
 -----------------------
 
 ``<md3-nav-tabs>`` is populated automatically from the root document's top-level
-``toctree`` entries (``md3_nav_tabs`` in ``paz/__init__.py``) and styled with
+``toctree`` entries (``md3_nav_tabs`` in ``md3/__init__.py``) and styled with
 MD3 primary navigation tab tokens:
 
 * **Container Height**: ``--md-comp-primary-navigation-tab-container-height: 36px``
