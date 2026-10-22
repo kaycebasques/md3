@@ -1,0 +1,43 @@
+load("@sphinxdocs//sphinxdocs:sphinx.bzl", "sphinx_build_binary", "sphinx_docs")
+load("@sphinxdocs//sphinxdocs:sphinx_docs_library.bzl", "sphinx_docs_library")
+
+package(default_visibility = ["//visibility:private"])
+
+sphinx_docs_library(
+    name = "content",
+    srcs = [
+        "index.rst",
+        "internals/index.rst",
+        "quickstart.rst",
+    ],
+)
+
+sphinx_build_binary(
+    name = "sphinx",
+    deps = [
+        "//md3",
+        "@deps//sphinx",
+    ],
+)
+
+sphinx_docs(
+    name = "docs",
+    allow_persistent_workers = False,
+    config = "conf.py",
+    extra_opts = [
+        "--color",
+        "--fail-on-warning",
+    ],
+    formats = ["html"],
+    sphinx = ":sphinx",
+    strip_prefix = "docs/",
+    deps = [":content"],
+)
+
+# sphinx_docs doesn't propagate `visibility` to the generated `docs.serve`
+# target, so expose it to the root package through an alias.
+alias(
+    name = "serve",
+    actual = ":docs.serve",
+    visibility = ["//:__pkg__"],
+)

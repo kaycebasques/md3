@@ -1,0 +1,19 @@
+load("@rules_python//python/uv:lock.bzl", "lock")
+
+lock(
+    name = "deps",
+    srcs = ["deps.in"],
+    out = "deps.txt",
+)
+
+alias(
+    name = "serve",
+    actual = "//docs:serve",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "wheel",
+    actual = "//md3:wheel",
+    visibility = ["//visibility:public"],
+)
