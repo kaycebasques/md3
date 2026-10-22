@@ -6,8 +6,9 @@ package(default_visibility = ["//visibility:private"])
 sphinx_docs_library(
     name = "content",
     srcs = [
+        "dev/index.rst",
+        "dev/test.rst",
         "index.rst",
-        "internals/index.rst",
         "quickstart.rst",
     ],
 )

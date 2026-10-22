@@ -4,4 +4,4 @@ Hello, world!
    :hidden:
 
    quickstart
-   internals/index
+   dev/index

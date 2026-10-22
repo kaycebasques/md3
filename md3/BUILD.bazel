@@ -14,7 +14,10 @@ py_library(
         "search.html",
         "theme.toml",
     ],
-    visibility = ["//docs:__pkg__"],
+    visibility = [
+        "//docs:__pkg__",
+        "//tests:__pkg__",
+    ],
 )
 
 py_package(

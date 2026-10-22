@@ -1,5 +1,10 @@
-Internals
-=========
+Development
+===========
+
+.. toctree::
+   :hidden:
+
+   test
 
 Setup
 -----

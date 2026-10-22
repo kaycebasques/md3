@@ -1,0 +1,32 @@
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
+package(default_visibility = ["//visibility:private"])
+
+py_library(
+    name = "harness",
+    srcs = ["harness.py"],
+    imports = ["."],
+    deps = [
+        "@deps//sphinx",
+    ],
+)
+
+py_test(
+    name = "console_test",
+    srcs = ["console_test.py"],
+    data = ["@playwright_chromium_linux_x64//:files"],
+    deps = [
+        ":harness",
+        "//md3",
+        "@deps//playwright",
+    ],
+)
+
+py_test(
+    name = "layout_test",
+    srcs = ["layout_test.py"],
+    deps = [
+        ":harness",
+        "//md3",
+    ],
+)
