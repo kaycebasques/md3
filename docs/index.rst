@@ -4,4 +4,6 @@ Hello, world!
    :hidden:
 
    quickstart
+   components/index
+   i18n
    dev/index

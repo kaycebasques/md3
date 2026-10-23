@@ -7,9 +7,13 @@ py_library(
     name = "md3",
     srcs = ["__init__.py"],
     data = [
+        "components/md3/tabs.css",
+        "components/md3/tabs.js",
         "domainindex.html",
         "genindex.html",
         "layout.html",
+        "locales/pt_BR/LC_MESSAGES/sphinx.mo",
+        "locales/pt_BR/LC_MESSAGES/sphinx.po",
         "page.html",
         "search.html",
         "theme.toml",
@@ -17,6 +21,9 @@ py_library(
     visibility = [
         "//docs:__pkg__",
         "//tests:__pkg__",
+    ],
+    deps = [
+        "@deps//sphinx",
     ],
 )
 

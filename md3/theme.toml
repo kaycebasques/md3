@@ -3,3 +3,6 @@ inherit = "none"
 stylesheets = []
 sidebars = []
 pygments_style = { default = "default" }
+
+[options]
+tabs = true

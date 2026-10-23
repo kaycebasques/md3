@@ -1,0 +1,23 @@
+Internationalization
+====================
+
+All UI strings in ``md3`` are marked for translation with Sphinx's ``gettext``
+(``_``) in both Python and Jinja templates.
+
+Usage
+-----
+
+Set ``language`` in ``conf.py``:
+
+.. code-block:: python
+
+   language = "pt_BR"
+
+Preview Locally
+---------------
+
+Serve the ``md3`` documentation in Brazilian Portuguese (``pt_BR``):
+
+.. code-block:: console
+
+   ./bazelisk run //:serve --@sphinxdocs//sphinxdocs:extra_defines=language=pt_BR

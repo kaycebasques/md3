@@ -4,8 +4,28 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>{{ title|striptags|e }}</title>
+    {%- for css in css_files %}
+    <link rel="stylesheet" href="{{ pathto(css.filename, 1) }}" type="text/css"/>
+    {%- endfor %}
+    {%- if theme_tabs and md3_tabs %}
+    <link rel="stylesheet" href="{{ pathto('_static/md3/tabs.css', 1) }}" type="text/css"/>
+    <script src="{{ pathto('_static/md3/tabs.js', 1) }}" type="module"></script>
+    {%- endif %}
   </head>
   <body>
+    {%- if theme_tabs and md3_tabs %}
+    <md3-tabs>
+      <nav aria-label="{{ _('Section navigation') }}">
+        <ul>
+          {%- for tab in md3_tabs %}
+          <li>
+            <a href="{{ tab.url }}"{% if tab.active %} aria-current="page"{% endif %}>{{ tab.title }}</a>
+          </li>
+          {%- endfor %}
+        </ul>
+      </nav>
+    </md3-tabs>
+    {%- endif %}
     {% block body %}{% endblock %}
   </body>
 </html>

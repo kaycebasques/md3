@@ -2,6 +2,15 @@ load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
 package(default_visibility = ["//visibility:private"])
 
+filegroup(
+    name = "chromium",
+    srcs = select({
+        "@bazel_tools//src/conditions:linux_x86_64": [
+            "@playwright_chromium_linux_x64//:files",
+        ],
+    }),
+)
+
 py_library(
     name = "harness",
     srcs = ["harness.py"],
@@ -14,7 +23,7 @@ py_library(
 py_test(
     name = "console_test",
     srcs = ["console_test.py"],
-    data = ["@playwright_chromium_linux_x64//:files"],
+    data = [":chromium"],
     deps = [
         ":harness",
         "//md3",
@@ -28,5 +37,16 @@ py_test(
     deps = [
         ":harness",
         "//md3",
+    ],
+)
+
+py_test(
+    name = "tabs_test",
+    srcs = ["tabs_test.py"],
+    data = [":chromium"],
+    deps = [
+        ":harness",
+        "//md3",
+        "@deps//playwright",
     ],
 )

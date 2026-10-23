@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Components"
+msgstr "Componentes"
+
+msgid ":doc:`tabs` (``<md3-tabs>``): Top-level primary navigation tabs."
+msgstr ":doc:`tabs` (``<md3-tabs>``): Abas de navegação primária de nível superior."
+
+msgid "Tabs"
+msgstr "Abas"
+
+msgid "``<md3-tabs>`` renders the root document's top-level ``toctree`` entries as `Material Design 3 primary navigation tabs <https://m3.material.io/components/tabs/specs>`_."
+msgstr "``<md3-tabs>`` renderiza as entradas ``toctree`` de nível superior do documento raiz como `abas de navegação primária do Material Design 3 <https://m3.material.io/components/tabs/specs>`_."
+
+msgid "Configuration"
+msgstr "Configuração"
+
+msgid "Top-level navigation tabs are enabled by default. To disable them in ``conf.py``:"
+msgstr "As abas de navegação de nível superior são ativadas por padrão. Para desativá-las em ``conf.py``:"
+
+msgid "Accessibility"
+msgstr "Acessibilidade"
+
+msgid "Links are rendered inside ``<nav aria-label=\"Section navigation\">`` with ``aria-current=\"page\"`` on the active section."
+msgstr "Os links são renderizados dentro de ``<nav aria-label=\"Section navigation\">`` com ``aria-current=\"page\"`` na seção ativa."
+
+msgid "``ArrowRight``, ``ArrowLeft``, ``Home``, and ``End`` move focus across tabs (`MD3 tabs keyboard navigation <https://m3.material.io/components/tabs/accessibility#a1ebaebd-1bb4-4401-9962-8b30a563e49e>`_)."
+msgstr "``ArrowRight``, ``ArrowLeft``, ``Home`` e ``End`` movem o foco entre as abas (`navegação por teclado das abas do MD3 <https://m3.material.io/components/tabs/accessibility#a1ebaebd-1bb4-4401-9962-8b30a563e49e>`_)."
+
+msgid "Development"
+msgstr "Desenvolvimento"
+
+msgid "Setup"
+msgstr "Configuração"
+
+msgid "Build the documentation:"
+msgstr "Compile a documentação:"
+
+msgid "Build and serve the documentation locally at ``http://0.0.0.0:8000``:"
+msgstr "Compile e sirva a documentação localmente em ``http://0.0.0.0:8000``:"
+
+msgid "Update Lockfiles"
+msgstr "Atualizar arquivos de trava"
+
+msgid "After modifying ``deps.in``, regenerate ``deps.txt``:"
+msgstr "Após modificar ``deps.in``, gere novamente ``deps.txt``:"
+
+msgid "Testing"
+msgstr "Testes"
+
+msgid "Quickstart"
+msgstr "Início rápido"
+
+msgid "Run all tests across the repository:"
+msgstr "Execute todos os testes no repositório:"
+
+msgid "Run a single test target:"
+msgstr "Execute um único alvo de teste:"
+
+msgid "Overview"
+msgstr "Visão geral"
+
+msgid "All tests live in ``tests/`` and are declared as standard ``py_test`` targets in ``tests/BUILD.bazel`` with explicit dependencies on only what each test needs."
+msgstr "Todos os testes ficam em ``tests/`` e são declarados como alvos ``py_test`` padrão em ``tests/BUILD.bazel`` com dependências explícitas apenas no que cada teste precisa."
+
+msgid "``tests/harness.py`` provides three standalone context managers:"
+msgstr "``tests/harness.py`` fornece três gerenciadores de contexto independentes:"
+
+msgid "``build_docs``: builds an isolated Sphinx site in a temporary directory and yields the output directory path."
+msgstr "``build_docs``: compila um site Sphinx isolado em um diretório temporário e retorna o caminho do diretório de saída."
+
+msgid "``DocsServer``: serves a built documentation directory over a local ``ThreadingHTTPServer``."
+msgstr "``DocsServer``: serve um diretório de documentação compilado por meio de um ``ThreadingHTTPServer`` local."
+
+msgid "``run_playwright``: launches hermetic Chrome for Testing via Playwright and yields a browser page."
+msgstr "``run_playwright``: inicia o Chrome for Testing hermético via Playwright e retorna uma página do navegador."
+
+msgid "Internationalization"
+msgstr "Internacionalização"
+
+msgid "All UI strings in ``md3`` are marked for translation with Sphinx's ``gettext`` (``_``) in both Python and Jinja templates."
+msgstr "Todas as strings de interface no ``md3`` são marcadas para tradução com o ``gettext`` (``_``) do Sphinx tanto em Python quanto nos templates Jinja."
+
+msgid "Usage"
+msgstr "Uso"
+
+msgid "Set ``language`` in ``conf.py``:"
+msgstr "Defina ``language`` em ``conf.py``:"
+
+msgid "Preview Locally"
+msgstr "Visualizar localmente"
+
+msgid "Serve the ``md3`` documentation in Brazilian Portuguese (``pt_BR``):"
+msgstr "Sirva a documentação do ``md3`` em português do Brasil (``pt_BR``):"
+
+msgid "Hello, world!"
+msgstr "Olá, mundo!"
+
+msgid "Install ``md3``:"
+msgstr "Instale o ``md3``:"
+
+msgid "Set ``html_theme`` in ``conf.py``:"
+msgstr "Defina ``html_theme`` em ``conf.py``:"
