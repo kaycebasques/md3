@@ -14,6 +14,7 @@ sphinx_docs_library(
         "index.rst",
         "locales/pt_BR/LC_MESSAGES/docs.mo",
         "locales/pt_BR/LC_MESSAGES/docs.po",
+        "md3.rst",
         "quickstart.rst",
     ],
 )
@@ -37,6 +38,7 @@ sphinx_docs(
     formats = ["html"],
     sphinx = ":sphinx",
     strip_prefix = "docs/",
+    visibility = ["//tests:__pkg__"],
     deps = [":content"],
 )
 

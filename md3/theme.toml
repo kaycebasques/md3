@@ -5,4 +5,5 @@ sidebars = []
 pygments_style = { default = "default" }
 
 [options]
+density = -3
 tabs = true

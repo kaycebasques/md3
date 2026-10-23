@@ -1,0 +1,11 @@
+:root {
+  --md-ref-palette-primary40: #0b57d0;
+  --md-ref-palette-secondary40: #00639b;
+  --md-ref-palette-neutral10: #1f1f1f;
+  --md-ref-palette-neutral100: #ffffff;
+  --md-ref-palette-neutral-variant30: #444746;
+  --md-ref-palette-neutral-variant80: #c4c7c5;
+
+  --md-ref-typeface-plain: "Google Sans Text", system-ui, sans-serif;
+  --md-ref-typeface-weight-medium: 500;
+}

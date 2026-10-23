@@ -50,3 +50,17 @@ py_test(
         "@deps//playwright",
     ],
 )
+
+py_test(
+    name = "tokens_test",
+    srcs = ["tokens_test.py"],
+    data = glob(["*_test.py"]) + [
+        ":chromium",
+        "//docs",
+    ],
+    deps = [
+        ":harness",
+        "//md3",
+        "@deps//playwright",
+    ],
+)

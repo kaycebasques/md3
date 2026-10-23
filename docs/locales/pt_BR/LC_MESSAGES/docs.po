@@ -31,6 +31,33 @@ msgstr "Os links são renderizados dentro de ``<nav aria-label=\"Section navigat
 msgid "``ArrowRight``, ``ArrowLeft``, ``Home``, and ``End`` move focus across tabs (`MD3 tabs keyboard navigation <https://m3.material.io/components/tabs/accessibility#a1ebaebd-1bb4-4401-9962-8b30a563e49e>`_)."
 msgstr "``ArrowRight``, ``ArrowLeft``, ``Home`` e ``End`` movem o foco entre as abas (`navegação por teclado das abas do MD3 <https://m3.material.io/components/tabs/accessibility#a1ebaebd-1bb4-4401-9962-8b30a563e49e>`_)."
 
+msgid "Density"
+msgstr "Densidade"
+
+msgid "``<md3-tabs>`` scales its container height with :ref:`MD3 density <density>` as ``calc(48px + var(--md3-density) * 4px)`` from the ``48dp`` `MD3 primary navigation tab height <https://m3.material.io/components/tabs/specs#8602158e-a13b-432e-8133-b9cb34d61678>`_ (``36px`` at the default ``-3`` density, ``40px`` at ``-2``, ``44px`` at ``-1``, and ``48px`` at ``0``)."
+msgstr "``<md3-tabs>`` escala a altura do seu contêiner com a :ref:`densidade do MD3 <density>` como ``calc(48px + var(--md3-density) * 4px)`` a partir da `altura de 48dp da aba de navegação primária do MD3 <https://m3.material.io/components/tabs/specs#8602158e-a13b-432e-8133-b9cb34d61678>`_ (``36px`` na densidade padrão ``-3``, ``40px`` em ``-2``, ``44px`` em ``-1`` e ``48px`` em ``0``)."
+
+msgid "Material Design 3"
+msgstr "Material Design 3"
+
+msgid "``md3`` implements `Material Design 3 <https://m3.material.io/>`_ using vanilla HTML, CSS, and progressive-enhancement JavaScript."
+msgstr "O ``md3`` implementa o `Material Design 3 <https://m3.material.io/>`_ usando HTML, CSS e JavaScript de aprimoramento progressivo puros."
+
+msgid "``md3`` implements the `MD3 density scale <https://m3.material.io/foundations/layout/grids-spacing/density>`_, where each step on the scale (``0``, ``-1``, ``-2``, ``-3``) adjusts a component's baseline height by ``4px`` via the ``--md3-density`` variable set on ``<html>``:"
+msgstr "O ``md3`` implementa a `escala de densidade do MD3 <https://m3.material.io/foundations/layout/grids-spacing/density>`_, onde cada passo na escala (``0``, ``-1``, ``-2``, ``-3``) ajusta a altura de base de um componente em ``4px`` por meio da variável ``--md3-density`` definida em ``<html>``:"
+
+msgid "To configure the density scale in ``conf.py`` (``-3``, ``-2``, ``-1``, or ``0``):"
+msgstr "Para configurar a escala de densidade em ``conf.py`` (``-3``, ``-2``, ``-1`` ou ``0``):"
+
+msgid "Components that apply density scaling document their formula in a ``Density`` section on their component page."
+msgstr "Os componentes que aplicam escalonamento de densidade documentam sua fórmula em uma seção ``Density`` na página do componente."
+
+msgid "Deviations"
+msgstr "Desvios"
+
+msgid "`MD3 density guidelines <https://m3.material.io/foundations/layout/grids-spacing/density>`_ state that high density should not be applied by default (recommending ``0`` as the default scale). Because ``md3`` targets technical documentation sites where maximizing information density is a primary goal, ``html_theme_options[\"density\"]`` defaults to ``-3`` instead of ``0``. Set ``\"density\": 0`` in ``html_theme_options`` to use baseline MD3 sizing."
+msgstr "As `diretrizes de densidade do MD3 <https://m3.material.io/foundations/layout/grids-spacing/density>`_ afirmam que a alta densidade não deve ser aplicada por padrão (recomendando ``0`` como a escala padrão). Como o ``md3`` é voltado para sites de documentação técnica onde maximizar a densidade de informações é um objetivo principal, ``html_theme_options[\"density\"]`` usa ``-3`` por padrão em vez de ``0``. Defina ``\"density\": 0`` em ``html_theme_options`` para usar o dimensionamento de base do MD3."
+
 msgid "Development"
 msgstr "Desenvolvimento"
 
@@ -78,6 +105,42 @@ msgstr "``DocsServer``: serve um diretório de documentação compilado por meio
 
 msgid "``run_playwright``: launches hermetic Chrome for Testing via Playwright and yields a browser page."
 msgstr "``run_playwright``: inicia o Chrome for Testing hermético via Playwright e retorna uma página do navegador."
+
+msgid "Tokens"
+msgstr "Tokens"
+
+msgid "``md3`` uses a two-tier CSS custom property hierarchy modeled after `Material Design 3 design tokens <https://m3.material.io/foundations/design-tokens/overview>`_. Every ``--md-ref-*`` and ``--md-sys-*`` variable name is a 1:1 CSS custom property mapping of an official dot-separated token name from ``m3.material.io`` (prefixing with ``--`` and replacing ``.`` with ``-``, e.g. ``md.sys.color.primary`` becomes ``--md-sys-color-primary``):"
+msgstr "O ``md3`` usa uma hierarquia de propriedades personalizadas CSS de dois níveis modelada a partir dos `tokens de design do Material Design 3 <https://m3.material.io/foundations/design-tokens/overview>`_. Cada nome de variável ``--md-ref-*`` e ``--md-sys-*`` é um mapeamento 1:1 em propriedade personalizada CSS de um nome de token oficial separado por pontos de ``m3.material.io`` (prefixando com ``--`` e substituindo ``.`` por ``-``, por exemplo, ``md.sys.color.primary`` torna-se ``--md-sys-color-primary``):"
+
+msgid "``md3/tokens/ref.css`` defines ``--md-ref-*`` reference tokens on ``:root`` from `MD3 baseline color tokens <https://m3.material.io/styles/color/static/baseline>`_ (``md.ref.palette.*``) and `MD3 type scale tokens <https://m3.material.io/styles/typography/type-scale-tokens>`_ (``md.ref.typeface.*``)."
+msgstr "``md3/tokens/ref.css`` define tokens de referência ``--md-ref-*`` em ``:root`` a partir dos `tokens de cores de base do MD3 <https://m3.material.io/styles/color/static/baseline>`_ (``md.ref.palette.*``) e dos `tokens de escala tipográfica do MD3 <https://m3.material.io/styles/typography/type-scale-tokens>`_ (``md.ref.typeface.*``)."
+
+msgid "``md3/tokens/sys.css`` defines ``--md-sys-*`` system tokens on ``:root`` referencing ``var(--md-ref-*)`` across `color <https://m3.material.io/styles/color/static/baseline>`_ (``md.sys.color.*``), `typography <https://m3.material.io/styles/typography/type-scale-tokens>`_ (``md.sys.typescale.*``), and `interaction states <https://m3.material.io/foundations/interaction/states/state-layers>`_ / `focus indicators <https://m3.material.io/foundations/interaction/states/applying-states>`_ (``md.sys.state.*``)."
+msgstr "``md3/tokens/sys.css`` define tokens de sistema ``--md-sys-*`` em ``:root`` referenciando ``var(--md-ref-*)`` em `cor <https://m3.material.io/styles/color/static/baseline>`_ (``md.sys.color.*``), `tipografia <https://m3.material.io/styles/typography/type-scale-tokens>`_ (``md.sys.typescale.*``) e `estados de interação <https://m3.material.io/foundations/interaction/states/state-layers>`_ / `indicadores de foco <https://m3.material.io/foundations/interaction/states/applying-states>`_ (``md.sys.state.*``)."
+
+msgid "Component stylesheets in ``md3/components/md3/`` and ``md3/components/app/`` consume ``var(--md-sys-*)`` tokens (plus ``var(--md3-density)`` for density scaling) and literal component measurements; they do not define ``:root`` blocks, custom properties (``--*``), or raw color literals."
+msgstr "As folhas de estilo de componentes em ``md3/components/md3/`` e ``md3/components/app/`` consomem tokens ``var(--md-sys-*)`` (além de ``var(--md3-density)`` para escalonamento de densidade) e medidas literais do componente; elas não definem blocos ``:root``, propriedades personalizadas (``--*``) ou literais de cores brutas."
+
+msgid "Only tokens actively used by implemented components are defined in ``ref.css`` and ``sys.css``."
+msgstr "Apenas os tokens ativamente usados por componentes implementados são definidos em ``ref.css`` e ``sys.css``."
+
+msgid "MD3 Compliance"
+msgstr "Conformidade com o MD3"
+
+msgid "``tests/tokens_test.py`` verifies the :doc:`/md3` token hierarchy, ensures no unused tokens accumulate in ``ref.css`` or ``sys.css``, checks that component stylesheets do not define ``:root`` blocks, custom properties (``--*``), or raw color literals, and validates all ``DOCS*_URL`` links and anchors referenced in ``tests/*_test.py``."
+msgstr "``tests/tokens_test.py`` verifica a hierarquia de tokens em :doc:`/md3`, garante que nenhum token não utilizado se acumule em ``ref.css`` ou ``sys.css``, verifica se as folhas de estilo dos componentes não definem blocos ``:root``, propriedades personalizadas (``--*``) ou literais de cores brutas e valida todos os links e âncoras ``DOCS*_URL`` referenciados em ``tests/*_test.py``."
+
+msgid "Every component test suite in ``tests/`` includes a ``test_md3`` method that verifies:"
+msgstr "Cada conjunto de testes de componente em ``tests/`` inclui um método ``test_md3`` que verifica:"
+
+msgid "Custom element registration and bounding box geometry."
+msgstr "Registro de elemento personalizado e geometria da caixa delimitadora."
+
+msgid "Computed styles against ``SYS_COLORS``, ``SYS_TYPESCALE``, and ``SYS_STATE`` in ``tests/harness.py`` across resting, ``:hover``, ``:active``, and ``:focus-visible`` states."
+msgstr "Estilos computados em comparação com ``SYS_COLORS``, ``SYS_TYPESCALE`` e ``SYS_STATE`` em ``tests/harness.py`` nos estados de repouso, ``:hover``, ``:active`` e ``:focus-visible``."
+
+msgid "Failure messages linking to both our documentation and ``https://m3.material.io/``. Standard MD3 measurements are not repeated in prose documentation; components that apply `MD3 density scaling <https://m3.material.io/foundations/layout/grids-spacing/density>`_ document their scale in a ``Density`` section on the component's documentation page, and any intentional deviation from MD3 specs must be documented in a ``Deviations`` section and linked from that assertion in ``test_md3``."
+msgstr "Mensagens de falha com links tanto para nossa documentação quanto para ``https://m3.material.io/``. As medidas padrão do MD3 não são repetidas na documentação em prosa; os componentes que aplicam o `escalonamento de densidade do MD3 <https://m3.material.io/foundations/layout/grids-spacing/density>`_ documentam sua escala em uma seção ``Density`` na página de documentação do componente, e qualquer desvio intencional das especificações do MD3 deve ser documentado em uma seção ``Deviations`` e vinculado a partir dessa asserção em ``test_md3``."
 
 msgid "Internationalization"
 msgstr "Internacionalização"

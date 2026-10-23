@@ -4,6 +4,7 @@ Hello, world!
    :hidden:
 
    quickstart
+   md3
    components/index
    i18n
    dev/index

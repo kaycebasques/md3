@@ -9,6 +9,65 @@ import threading
 
 from sphinx.application import Sphinx
 
+REF_TOKENS = {
+    "--md-ref-palette-primary40": "#0b57d0",
+    "--md-ref-palette-secondary40": "#00639b",
+    "--md-ref-palette-neutral10": "#1f1f1f",
+    "--md-ref-palette-neutral100": "#ffffff",
+    "--md-ref-palette-neutral-variant30": "#444746",
+    "--md-ref-palette-neutral-variant80": "#c4c7c5",
+    "--md-ref-typeface-plain": '"Google Sans Text", system-ui, sans-serif',
+    "--md-ref-typeface-weight-medium": "500",
+}
+
+SYS_TOKENS = {
+    "--md-sys-color-primary": "#0b57d0",
+    "--md-sys-color-secondary": "#00639b",
+    "--md-sys-color-surface": "#ffffff",
+    "--md-sys-color-on-surface": "#1f1f1f",
+    "--md-sys-color-on-surface-variant": "#444746",
+    "--md-sys-color-outline-variant": "#c4c7c5",
+    "--md-sys-typescale-title-small-font": '"Google Sans Text", system-ui, sans-serif',
+    "--md-sys-typescale-title-small-size": "0.875rem",
+    "--md-sys-typescale-title-small-line-height": "1.25rem",
+    "--md-sys-typescale-title-small-weight": "500",
+    "--md-sys-typescale-title-small-tracking": "0.00625rem",
+    "--md-sys-state-hover-state-layer-opacity": "8%",
+    "--md-sys-state-pressed-state-layer-opacity": "10%",
+    "--md-sys-state-focus-indicator-thickness": "3px",
+}
+
+SYS_COLORS = {
+    "primary": "rgb(11, 87, 208)",
+    "secondary": "rgb(0, 99, 155)",
+    "surface": "rgb(255, 255, 255)",
+    "on-surface": "rgb(31, 31, 31)",
+    "on-surface-variant": "rgb(68, 71, 70)",
+    "outline-variant": "rgb(196, 199, 197)",
+}
+
+SYS_TYPESCALE = {
+    "title-small": {
+        "fontFamily": '"Google Sans Text", system-ui, sans-serif',
+        "fontSize": "14px",
+        "lineHeight": "20px",
+        "fontWeight": "500",
+        "letterSpacing": "0.1px",
+    },
+}
+
+SYS_STATE = {
+    "focus-indicator-thickness": "3px",
+    "hover": {
+        "primary": "color(srgb 0.0431373 0.341176 0.815686 / 0.08)",
+        "on-surface": "color(srgb 0.121569 0.121569 0.121569 / 0.08)",
+    },
+    "pressed": {
+        "primary": "color(srgb 0.0431373 0.341177 0.815686 / 0.1)",
+        "on-surface": "color(srgb 0.121569 0.121569 0.121569 / 0.1)",
+    },
+}
+
 
 def get_chromium_executable() -> str:
     """Returns path to the hermetic Chromium binary from Bazel runfiles."""

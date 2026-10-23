@@ -1,0 +1,18 @@
+:root {
+  --md-sys-color-primary: var(--md-ref-palette-primary40);
+  --md-sys-color-secondary: var(--md-ref-palette-secondary40);
+  --md-sys-color-surface: var(--md-ref-palette-neutral100);
+  --md-sys-color-on-surface: var(--md-ref-palette-neutral10);
+  --md-sys-color-on-surface-variant: var(--md-ref-palette-neutral-variant30);
+  --md-sys-color-outline-variant: var(--md-ref-palette-neutral-variant80);
+
+  --md-sys-typescale-title-small-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-title-small-size: 0.875rem;
+  --md-sys-typescale-title-small-line-height: 1.25rem;
+  --md-sys-typescale-title-small-weight: var(--md-ref-typeface-weight-medium);
+  --md-sys-typescale-title-small-tracking: 0.00625rem;
+
+  --md-sys-state-hover-state-layer-opacity: 8%;
+  --md-sys-state-pressed-state-layer-opacity: 10%;
+  --md-sys-state-focus-indicator-thickness: 3px;
+}

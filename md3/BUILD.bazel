@@ -17,6 +17,8 @@ py_library(
         "page.html",
         "search.html",
         "theme.toml",
+        "tokens/ref.css",
+        "tokens/sys.css",
     ],
     visibility = [
         "//docs:__pkg__",

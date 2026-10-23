@@ -5,13 +5,25 @@ from sphinx.locale import _
 
 
 def configure_theme(app, config):
+    density = config.html_theme_options.get("density", -3)
+    if (
+        isinstance(density, bool)
+        or not isinstance(density, int)
+        or density not in (-3, -2, -1, 0)
+    ):
+        raise ConfigError(
+            "html_theme_options['density'] must be -3, -2, -1, or 0"
+        )
+
     tabs_enabled = config.html_theme_options.get("tabs", True)
     if not isinstance(tabs_enabled, bool):
         raise ConfigError("html_theme_options['tabs'] must be a bool")
 
-    components_dir = str(Path(__file__).resolve().parent / "components")
-    if components_dir not in config.html_static_path:
-        config.html_static_path.append(components_dir)
+    package_dir = Path(__file__).resolve().parent
+    for subdir in ("tokens", "components"):
+        static_dir = str(package_dir / subdir)
+        if static_dir not in config.html_static_path:
+            config.html_static_path.append(static_dir)
 
 
 def _in_subtree(includes: dict[str, list[str]], root: str, target: str) -> bool:

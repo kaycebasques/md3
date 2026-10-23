@@ -1,9 +1,11 @@
 <!doctype html>
-<html lang="{{ language|default('en') }}">
+<html lang="{{ language|default('en') }}" style="--md3-density: {{ theme_density }}">
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>{{ title|striptags|e }}</title>
+    <link rel="stylesheet" href="{{ pathto('_static/ref.css', 1) }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ pathto('_static/sys.css', 1) }}" type="text/css"/>
     {%- for css in css_files %}
     <link rel="stylesheet" href="{{ pathto(css.filename, 1) }}" type="text/css"/>
     {%- endfor %}
