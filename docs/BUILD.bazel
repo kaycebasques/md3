@@ -6,16 +6,7 @@ package(default_visibility = ["//visibility:private"])
 sphinx_docs_library(
     name = "content",
     srcs = [
-        "components/index.rst",
-        "components/tabs.rst",
-        "dev/index.rst",
-        "dev/test.rst",
-        "i18n.rst",
         "index.rst",
-        "locales/pt_BR/LC_MESSAGES/docs.mo",
-        "locales/pt_BR/LC_MESSAGES/docs.po",
-        "md3.rst",
-        "quickstart.rst",
     ],
 )
 
@@ -38,7 +29,6 @@ sphinx_docs(
     formats = ["html"],
     sphinx = ":sphinx",
     strip_prefix = "docs/",
-    visibility = ["//tests:__pkg__"],
     deps = [":content"],
 )
 

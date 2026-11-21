@@ -10,5 +10,3 @@ copyright = f"2026, {author}"
 # `md3.setup(app)` runs and registers the theme.
 extensions = ["md3"]
 html_theme = "md3"
-locale_dirs = ["locales"]
-gettext_compact = "docs"
